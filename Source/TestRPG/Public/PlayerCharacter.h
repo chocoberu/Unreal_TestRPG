@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
+class UTPlayerAnimInstance;
+
 UCLASS()
 class TESTRPG_API APlayerCharacter : public ACharacter
 {
@@ -22,13 +24,16 @@ protected:
 	// Input Func
 	void MoveForward(float Value);
 	void MoveRight(float Value);
-
+	
 	// Camera
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UCameraComponent* CameraComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class USpringArmComponent* SpringArmComp;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	class UTPlayerAnimInstance* AnimInstance;
 
 public:	
 	// Called every frame
