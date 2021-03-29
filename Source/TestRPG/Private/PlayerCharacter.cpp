@@ -6,6 +6,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "TPlayerAnimInstance.h"
+#include "THealthComponent.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -21,6 +22,7 @@ APlayerCharacter::APlayerCharacter()
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	CameraComp->SetupAttachment(SpringArmComp);
 
+	HealthComponent = CreateDefaultSubobject<UTHealthComponent>(TEXT("HealthComp"));
 }
 
 // Called when the game starts or when spawned
