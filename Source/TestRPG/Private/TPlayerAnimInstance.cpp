@@ -5,7 +5,7 @@
 
 UTPlayerAnimInstance::UTPlayerAnimInstance()
 {
-
+	bIsDead = false;
 }
 
 void UTPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)

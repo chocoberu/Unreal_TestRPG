@@ -3,6 +3,7 @@
 
 #include "TwinGunnerCharacter.h"
 #include "TPlayerAnimInstance.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 
@@ -23,7 +24,6 @@ void ATwinGunnerCharacter::BeginPlay()
 	if(AnimInstance == nullptr)
 		UE_LOG(LogTemp, Error, TEXT("AnimInstance is nullptr"));
 
-	//AnimInstance->OnNormalAttackHitCheckDelegate.AddUFunction(this, &ATwinGunnerCharacter::NormalAttackCheck);
 	AnimInstance->OnNormalAttackHitCheckDelegate.AddUObject(this, &ATwinGunnerCharacter::NormalAttackCheck);
 	//AnimInstance->OnNormalAttackHitCheckDelegate.AddLambda([this]() -> void {NormalAttackCheck(); });
 }
@@ -60,6 +60,10 @@ void ATwinGunnerCharacter::Shift()
 	else
 		UE_LOG(LogTemp, Error, TEXT("AnimInstance is nullptr"));
 
+	//GetCharacterMovement()->
+	float Velocity = 900.0f; // 순간 속도
+	GetCharacterMovement()->Velocity = GetActorForwardVector() * Velocity;
+	Jump();
 }
 
 void ATwinGunnerCharacter::NormalAttackCheck()

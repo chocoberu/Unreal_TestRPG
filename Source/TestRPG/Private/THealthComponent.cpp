@@ -2,6 +2,7 @@
 
 
 #include "THealthComponent.h"
+#include "TPlayerAnimInstance.h"
 
 // Sets default values for this component's properties
 UTHealthComponent::UTHealthComponent()
@@ -19,9 +20,33 @@ void UTHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	AActor* Owner = GetOwner();
+
+	if (Owner)
+	{
+		Owner->OnTakeAnyDamage.AddDynamic(this, &UTHealthComponent::HandleTakeAnyDamage);
+	}
 	
 	Health = DefaultHealth;
+}
+
+void UTHealthComponent::HandleTakeAnyDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
+{
+	if (Damage <= 0.0f || bIsDead)
+		return;
+	// TODO : 같은 팀에게 받은 데미지 무시
+
+	Health = FMath::Clamp(Health - Damage, 0.0f, DefaultHealth);
+	UE_LOG(LogTemp, Log, TEXT("Health Changed : %s"), *FString::SanitizeFloat(Health));
+
+	bIsDead = Health <= 0.0f;
+	
+	OnHealthChanged.Broadcast(this, Health, Damage, DamageType, InstigatedBy, DamageCauser);
+
+	if (bIsDead)
+	{
+		// TODO : 처리
+	}
 }
 
 
@@ -30,7 +55,6 @@ void UTHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
 }
 
 float UTHealthComponent::GetHealth() const

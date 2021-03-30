@@ -23,6 +23,8 @@ public:
 
 	void PlayNormalAttack();
 	void PlayShift();
+
+	void SetDeadAnim() { bIsDead = true; }
 	
 	FOnNormalAttackHitCheckDelegate OnNormalAttackHitCheckDelegate;
 protected:
@@ -32,6 +34,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	UAnimMontage* ShiftMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
+	bool bIsDead;
 
 private:
 	UFUNCTION()
