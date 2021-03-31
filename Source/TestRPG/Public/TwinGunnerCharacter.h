@@ -52,4 +52,7 @@ public:
 
 	UFUNCTION()
 	void NormalAttackCheck();
+
+	UFUNCTION()
+	void SetNormalAttackEnd();
 };

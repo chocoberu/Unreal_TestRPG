@@ -27,6 +27,8 @@ APlayerCharacter::APlayerCharacter()
 	HealthComponent->OnHealthChanged.AddUObject(this, &APlayerCharacter::OnHealthChanged);
 
 	bDied = false;
+	bNormalAttack = false;
+	NormalAttackCoolTime = 1.0f;
 }
 
 // Called when the game starts or when spawned
@@ -60,6 +62,7 @@ void APlayerCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, floa
 		AnimInst->SetDeadAnim();
 
 		DetachFromControllerPendingDestroy();
+		GetWorldTimerManager().ClearTimer(NormalAttackTimer);
 
 		SetLifeSpan(10.0f);
 	}

@@ -45,6 +45,14 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Player")
 	bool bDied;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Attack")
+	bool bNormalAttack;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
+	float NormalAttackCoolTime;
+
+	FTimerHandle NormalAttackTimer;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

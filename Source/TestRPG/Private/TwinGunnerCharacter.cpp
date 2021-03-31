@@ -13,6 +13,7 @@ ATwinGunnerCharacter::ATwinGunnerCharacter()
 	AttackRadius = 50.0f;
 
 	MuzzleSocket = TEXT("Muzzle_01");
+	
 }
 
 void ATwinGunnerCharacter::BeginPlay()
@@ -25,7 +26,7 @@ void ATwinGunnerCharacter::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("AnimInstance is nullptr"));
 
 	AnimInstance->OnNormalAttackHitCheckDelegate.AddUObject(this, &ATwinGunnerCharacter::NormalAttackCheck);
-	//AnimInstance->OnNormalAttackHitCheckDelegate.AddLambda([this]() -> void {NormalAttackCheck(); });
+	AnimInstance->OnNormalAttackEndDelegate.AddUObject(this, &ATwinGunnerCharacter::SetNormalAttackEnd);
 }
 
 // Called every frame
@@ -46,8 +47,14 @@ void ATwinGunnerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 void ATwinGunnerCharacter::NormalAttack()
 {
+	if (bNormalAttack)
+		return;
 	if (AnimInstance != nullptr)
+	{
 		AnimInstance->PlayNormalAttack();
+		bNormalAttack = true;
+		GetWorldTimerManager().SetTimer(NormalAttackTimer, this, &ATwinGunnerCharacter::SetNormalAttackEnd, NormalAttackCoolTime, false);
+	}
 	else
 		UE_LOG(LogTemp, Error, TEXT("AnimInstance is nullptr"));
 	
@@ -117,4 +124,8 @@ void ATwinGunnerCharacter::NormalAttackCheck()
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), NormalAttackHitParticle, HitResult.ImpactPoint, HitResult.ImpactNormal.Rotation());
 		}
 	}
+}
+void ATwinGunnerCharacter::SetNormalAttackEnd()
+{
+	bNormalAttack = false;
 }

@@ -8,6 +8,7 @@
 
 //DECLARE_MULTICAST_DELEGATE(FOnNormalAttackHitCheckDelegate);
 using FOnNormalAttackHitCheckDelegate = TMulticastDelegate<void()>;
+using FOnNormalAttackEndDelegate = TMulticastDelegate<void()>;
 /**
  * 
  */
@@ -27,6 +28,7 @@ public:
 	void SetDeadAnim() { bIsDead = true; }
 	
 	FOnNormalAttackHitCheckDelegate OnNormalAttackHitCheckDelegate;
+	FOnNormalAttackEndDelegate OnNormalAttackEndDelegate;
 protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
@@ -42,4 +44,6 @@ private:
 	UFUNCTION()
 	void AnimNotify_NormalAttackCheck();
 
+	UFUNCTION()
+	void AnimNotify_NormalAttackEnd();
 };

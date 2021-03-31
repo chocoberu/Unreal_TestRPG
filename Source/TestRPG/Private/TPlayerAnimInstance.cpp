@@ -11,8 +11,6 @@ UTPlayerAnimInstance::UTPlayerAnimInstance()
 void UTPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
-
-
 }
 
 void UTPlayerAnimInstance::PlayNormalAttack()
@@ -30,7 +28,13 @@ void UTPlayerAnimInstance::PlayShift()
 	if (ShiftMontage != nullptr)
 		Montage_Play(ShiftMontage, 1.0f);
 }
+
 void UTPlayerAnimInstance::AnimNotify_NormalAttackCheck()
 {
 	OnNormalAttackHitCheckDelegate.Broadcast();
+}
+
+void UTPlayerAnimInstance::AnimNotify_NormalAttackEnd()
+{
+	//OnNormalAttackEndDelegate.Broadcast();
 }
