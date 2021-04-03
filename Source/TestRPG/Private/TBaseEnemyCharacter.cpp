@@ -3,6 +3,9 @@
 
 #include "TBaseEnemyCharacter.h"
 #include "THealthComponent.h"
+#include "TEnemyAnimInstance.h"
+#include "GameFramework/PawnMovementComponent.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 ATBaseEnemyCharacter::ATBaseEnemyCharacter()
@@ -11,7 +14,7 @@ ATBaseEnemyCharacter::ATBaseEnemyCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	HealthComponent = CreateDefaultSubobject<UTHealthComponent>(TEXT("HealthComp"));
-
+	HealthComponent->OnHealthChanged.AddUObject(this, &ATBaseEnemyCharacter::OnHealthChanged);
 }
 
 // Called when the game starts or when spawned
@@ -19,6 +22,24 @@ void ATBaseEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void ATBaseEnemyCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, float Health, float HealthDelta, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
+{
+	if (Health <= 0.0f && !bDied)
+	{
+		bDied = true;
+
+		GetMovementComponent()->StopMovementImmediately();
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		auto AnimInst = Cast<UTEnemyAnimInstance>(GetMesh()->GetAnimInstance());
+		AnimInst->SetDeadAnim();
+
+		DetachFromControllerPendingDestroy();
+		
+		SetLifeSpan(10.0f);
+	}
 }
 
 // Called every frame

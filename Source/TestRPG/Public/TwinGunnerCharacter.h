@@ -6,6 +6,7 @@
 #include "PlayerCharacter.h"
 #include "TwinGunnerCharacter.generated.h"
 
+class ATwinGunnerUltimateGun;
 /**
  * 
  */
@@ -24,12 +25,20 @@ protected:
 	// Input Func
 	void NormalAttack();
 	void Shift();
+	void ESkill();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
 	float AttackRange;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
 	float AttackRadius;
+
+	UPROPERTY()
+	ATwinGunnerUltimateGun* UltimateGun;
+
+	UPROPERTY(EditAnywhere, Category = "Player")
+	TSubclassOf<ATwinGunnerUltimateGun> UltimateGunClass;
+
 private:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
@@ -54,5 +63,5 @@ public:
 	void NormalAttackCheck();
 
 	UFUNCTION()
-	void SetNormalAttackEnd();
+	void SetESkillEnd();
 };

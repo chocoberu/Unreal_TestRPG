@@ -27,7 +27,7 @@ protected:
 
 	UFUNCTION()
 	void OnHealthChanged(class UTHealthComponent* OwningHealthComp, float Health, float HealthDelta, const class UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
-	
+
 	// Camera
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UCameraComponent* CameraComp;
@@ -48,10 +48,17 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Attack")
 	bool bNormalAttack;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Attack")
+	bool bShift;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
 	float NormalAttackCoolTime;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
+	float ShiftSkillCoolTime;
+
 	FTimerHandle NormalAttackTimer;
+	FTimerHandle ShiftTimer;
 
 public:	
 	// Called every frame
@@ -60,4 +67,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void SetNormalAttackEnd();
+	void SetShiftSkillEnd();
+	
 };

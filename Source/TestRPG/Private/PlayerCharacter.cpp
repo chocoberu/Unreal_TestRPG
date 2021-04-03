@@ -29,6 +29,7 @@ APlayerCharacter::APlayerCharacter()
 	bDied = false;
 	bNormalAttack = false;
 	NormalAttackCoolTime = 1.0f;
+	ShiftSkillCoolTime = 1.0f;
 }
 
 // Called when the game starts or when spawned
@@ -87,5 +88,13 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &ACharacter::Jump);
 }
 
+void APlayerCharacter::SetNormalAttackEnd()
+{
+	bNormalAttack = false;
+}
 
+void APlayerCharacter::SetShiftSkillEnd()
+{
+	bShift = false;
+}
 

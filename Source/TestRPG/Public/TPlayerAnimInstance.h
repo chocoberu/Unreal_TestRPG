@@ -8,7 +8,7 @@
 
 //DECLARE_MULTICAST_DELEGATE(FOnNormalAttackHitCheckDelegate);
 using FOnNormalAttackHitCheckDelegate = TMulticastDelegate<void()>;
-using FOnNormalAttackEndDelegate = TMulticastDelegate<void()>;
+using FOnESkillEndDelegate = TMulticastDelegate<void()>;
 /**
  * 
  */
@@ -24,11 +24,12 @@ public:
 
 	void PlayNormalAttack();
 	void PlayShift();
+	void PlayESkill();
 
 	void SetDeadAnim() { bIsDead = true; }
 	
 	FOnNormalAttackHitCheckDelegate OnNormalAttackHitCheckDelegate;
-	FOnNormalAttackEndDelegate OnNormalAttackEndDelegate;
+	FOnESkillEndDelegate OnESkillEndDelegate;
 protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
@@ -36,6 +37,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	UAnimMontage* ShiftMontage;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	UAnimMontage* ESkillMontage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 	bool bIsDead;
@@ -45,5 +49,5 @@ private:
 	void AnimNotify_NormalAttackCheck();
 
 	UFUNCTION()
-	void AnimNotify_NormalAttackEnd();
+	void AnimNotify_ESkillEnd();
 };

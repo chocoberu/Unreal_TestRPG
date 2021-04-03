@@ -6,6 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
+#include "TwinGunnerUltimateGun.h"
 
 ATwinGunnerCharacter::ATwinGunnerCharacter()
 {
@@ -26,7 +27,19 @@ void ATwinGunnerCharacter::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("AnimInstance is nullptr"));
 
 	AnimInstance->OnNormalAttackHitCheckDelegate.AddUObject(this, &ATwinGunnerCharacter::NormalAttackCheck);
-	AnimInstance->OnNormalAttackEndDelegate.AddUObject(this, &ATwinGunnerCharacter::SetNormalAttackEnd);
+	AnimInstance->OnESkillEndDelegate.AddUObject(this, &ATwinGunnerCharacter::SetESkillEnd);
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	UltimateGun = GetWorld()->SpawnActor<ATwinGunnerUltimateGun>(UltimateGunClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+	
+	if (UltimateGun)
+	{
+		UltimateGun->SetOwner(this);
+		FName Soket = FName(TEXT("FX_Ult_Reticule_Main"));
+		UltimateGun->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, Soket);
+		UltimateGun->SetActorHiddenInGame(true);
+	}
 }
 
 // Called every frame
@@ -43,6 +56,7 @@ void ATwinGunnerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 	PlayerInputComponent->BindAction("NormalAttack", EInputEvent::IE_Pressed, this, &ATwinGunnerCharacter::NormalAttack);
 	PlayerInputComponent->BindAction("Shift", EInputEvent::IE_Pressed, this, &ATwinGunnerCharacter::Shift);
+	PlayerInputComponent->BindAction("E", EInputEvent::IE_Pressed, this, &ATwinGunnerCharacter::ESkill);
 }
 
 void ATwinGunnerCharacter::NormalAttack()
@@ -53,7 +67,7 @@ void ATwinGunnerCharacter::NormalAttack()
 	{
 		AnimInstance->PlayNormalAttack();
 		bNormalAttack = true;
-		GetWorldTimerManager().SetTimer(NormalAttackTimer, this, &ATwinGunnerCharacter::SetNormalAttackEnd, NormalAttackCoolTime, false);
+		GetWorldTimerManager().SetTimer(NormalAttackTimer, this, &APlayerCharacter::SetNormalAttackEnd, NormalAttackCoolTime, false);
 	}
 	else
 		UE_LOG(LogTemp, Error, TEXT("AnimInstance is nullptr"));
@@ -62,15 +76,38 @@ void ATwinGunnerCharacter::NormalAttack()
 
 void ATwinGunnerCharacter::Shift()
 {
+	if (bShift)
+		return;
 	if (AnimInstance != nullptr)
+	{
 		AnimInstance->PlayShift();
+		// 테스트 코드
+		float Velocity = 900.0f; // 순간 속도
+		GetCharacterMovement()->Velocity = GetActorForwardVector() * Velocity;
+		Jump();
+
+		bShift = true;
+		GetWorldTimerManager().SetTimer(ShiftTimer, this, &APlayerCharacter::SetShiftSkillEnd, ShiftSkillCoolTime, false);
+	}
 	else
 		UE_LOG(LogTemp, Error, TEXT("AnimInstance is nullptr"));
 
 	//GetCharacterMovement()->
-	float Velocity = 900.0f; // 순간 속도
-	GetCharacterMovement()->Velocity = GetActorForwardVector() * Velocity;
-	Jump();
+	
+}
+
+void ATwinGunnerCharacter::ESkill()
+{
+	if (AnimInstance != nullptr)
+	{
+		AnimInstance->PlayESkill();
+		UltimateGun->SetActorHiddenInGame(false);
+	}
+}
+
+void ATwinGunnerCharacter::SetESkillEnd()
+{
+	UltimateGun->SetActorHiddenInGame(true);
 }
 
 void ATwinGunnerCharacter::NormalAttackCheck()
@@ -124,8 +161,4 @@ void ATwinGunnerCharacter::NormalAttackCheck()
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), NormalAttackHitParticle, HitResult.ImpactPoint, HitResult.ImpactNormal.Rotation());
 		}
 	}
-}
-void ATwinGunnerCharacter::SetNormalAttackEnd()
-{
-	bNormalAttack = false;
 }
