@@ -14,7 +14,8 @@ ATwinGunnerCharacter::ATwinGunnerCharacter()
 	AttackRadius = 50.0f;
 
 	MuzzleSocket = TEXT("Muzzle_01");
-	
+	TwinGunnerPlayerState = ETwinGunnerState::E_Idle;
+	UltimateGunSokcet = FName(TEXT("FX_Ult_Reticule_Main"));
 }
 
 void ATwinGunnerCharacter::BeginPlay()
@@ -36,8 +37,7 @@ void ATwinGunnerCharacter::BeginPlay()
 	if (UltimateGun)
 	{
 		UltimateGun->SetOwner(this);
-		FName Soket = FName(TEXT("FX_Ult_Reticule_Main"));
-		UltimateGun->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, Soket);
+		UltimateGun->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, UltimateGunSokcet);
 		UltimateGun->SetActorHiddenInGame(true);
 	}
 }
@@ -76,7 +76,7 @@ void ATwinGunnerCharacter::NormalAttack()
 
 void ATwinGunnerCharacter::Shift()
 {
-	if (bShift)
+	if (bShift || TwinGunnerPlayerState == ETwinGunnerState::E_UltimateGun)
 		return;
 	if (AnimInstance != nullptr)
 	{
@@ -102,12 +102,14 @@ void ATwinGunnerCharacter::ESkill()
 	{
 		AnimInstance->PlayESkill();
 		UltimateGun->SetActorHiddenInGame(false);
+		TwinGunnerPlayerState = ETwinGunnerState::E_UltimateGun;
 	}
 }
 
 void ATwinGunnerCharacter::SetESkillEnd()
 {
 	UltimateGun->SetActorHiddenInGame(true);
+	TwinGunnerPlayerState = ETwinGunnerState::E_Idle;
 }
 
 void ATwinGunnerCharacter::NormalAttackCheck()

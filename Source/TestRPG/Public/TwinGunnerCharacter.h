@@ -10,6 +10,15 @@ class ATwinGunnerUltimateGun;
 /**
  * 
  */
+
+UENUM(BlueprintType)
+enum class ETwinGunnerState : uint8
+{
+	E_Idle = 0 UMETA(DisplayName = "Idle"),
+	E_UltimateGun UMETA(DIsplayName = "UltimateGun"),
+	E_Dead UMETA(DisplayName ="Dead"),
+};
+
 UCLASS()
 class TESTRPG_API ATwinGunnerCharacter : public APlayerCharacter
 {
@@ -38,6 +47,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Player")
 	TSubclassOf<ATwinGunnerUltimateGun> UltimateGunClass;
+
+	UPROPERTY(BlueprintReadOnly)
+	ETwinGunnerState TwinGunnerPlayerState;
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	FName UltimateGunSokcet;
 
 private:
 	
