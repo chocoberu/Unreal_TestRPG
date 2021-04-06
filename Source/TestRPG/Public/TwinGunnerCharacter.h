@@ -15,6 +15,7 @@ UENUM(BlueprintType)
 enum class ETwinGunnerState : uint8
 {
 	E_Idle = 0 UMETA(DisplayName = "Idle"),
+	E_ChargeBlast UMETA(DisplayName = "ChargeBlast"),
 	E_UltimateGun UMETA(DIsplayName = "UltimateGun"),
 	E_Dead UMETA(DisplayName ="Dead"),
 };
@@ -35,6 +36,7 @@ protected:
 	void NormalAttack();
 	void Shift();
 	void ESkill();
+	void QSkill();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
 	float AttackRange;
@@ -58,6 +60,9 @@ private:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	class UParticleSystem* NormalAttackHitParticle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	class UParticleSystem* QSkillHitParticle;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", Meta = (AllowPrivateAccess = true))
 	bool IsDead;
@@ -78,5 +83,11 @@ public:
 	void NormalAttackCheck();
 
 	UFUNCTION()
+	void QSkillCheck();
+
+	UFUNCTION()
 	void SetESkillEnd();
+
+	UFUNCTION()
+	void SetQSkillEnd();
 };

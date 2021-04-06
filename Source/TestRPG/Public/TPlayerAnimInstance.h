@@ -6,8 +6,18 @@
 #include "Animation/AnimInstance.h"
 #include "TPlayerAnimInstance.generated.h"
 
-//DECLARE_MULTICAST_DELEGATE(FOnNormalAttackHitCheckDelegate);
+UENUM(BlueprintType)
+enum class EPlayerAnimState : uint8
+{
+	E_Idle = 0 UMETA(DisplayName = "Idle"),
+	E_QSkill UMETA(DisplayName = "Q Skill"),
+	E_ESkill UMETA(DIsplayName = "E Skill"),
+	E_Dead UMETA(DisplayName = "Dead"),
+};
+
 using FOnNormalAttackHitCheckDelegate = TMulticastDelegate<void()>;
+using FOnQSkillCheckDelegate = TMulticastDelegate<void()>;
+using FOnQSkillEndDelegate = TMulticastDelegate<void()>;
 using FOnESkillEndDelegate = TMulticastDelegate<void()>;
 /**
  * 
@@ -25,15 +35,19 @@ public:
 	void PlayNormalAttack();
 	void PlayShift();
 	void PlayESkill();
+	void PlayQSkill();
 
 	void SetDeadAnim() { bIsDead = true; }
 	
 	FOnNormalAttackHitCheckDelegate OnNormalAttackHitCheckDelegate;
 	FOnESkillEndDelegate OnESkillEndDelegate;
+	FOnQSkillCheckDelegate OnQSkillCheckDelegate;
+	FOnQSkillEndDelegate OnQSkillEndDelegate;
+
 protected:
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
-	UAnimMontage* NormalAttackMontage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	TArray<UAnimMontage*> NormalAttackArray;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	UAnimMontage* ShiftMontage;
@@ -41,8 +55,16 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	UAnimMontage* ESkillMontage;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	UAnimMontage* QSkillMontage;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 	bool bIsDead;
+
+	int32 CurNormalAttackIndex;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	EPlayerAnimState PlayerAnimState;
 
 private:
 	UFUNCTION()
@@ -50,4 +72,14 @@ private:
 
 	UFUNCTION()
 	void AnimNotify_ESkillEnd();
+
+	UFUNCTION()
+	void AnimNotify_ResetNormalAttack();
+
+	UFUNCTION()
+	void AnimNotify_QSkillCheck();
+
+	UFUNCTION()
+	void AnimNotify_QSkillEnd();
+
 };
