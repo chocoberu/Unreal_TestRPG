@@ -38,9 +38,10 @@ void UTPlayerAnimInstance::PlayShift()
 
 void UTPlayerAnimInstance::PlayESkill()
 {
-	if (ESkillMontage != nullptr)
-		Montage_Play(ESkillMontage, 1.0f);
-
+	/*if (ESkillMontage != nullptr)
+		Montage_Play(ESkillMontage, 1.0f);*/
+	
+	PlayerAnimState = EPlayerAnimState::E_ESkill;
 	CurNormalAttackIndex = 0;
 }
 
@@ -60,6 +61,7 @@ void UTPlayerAnimInstance::AnimNotify_NormalAttackCheck()
 void UTPlayerAnimInstance::AnimNotify_ESkillEnd()
 {
 	OnESkillEndDelegate.Broadcast();
+	PlayerAnimState = EPlayerAnimState::E_Idle;
 }
 
 void UTPlayerAnimInstance::AnimNotify_ResetNormalAttack()
@@ -75,4 +77,5 @@ void UTPlayerAnimInstance::AnimNotify_QSkillCheck()
 void UTPlayerAnimInstance::AnimNotify_QSkillEnd()
 {
 	OnQSkillEndDelegate.Broadcast();
+	PlayerAnimState = EPlayerAnimState::E_Idle;
 }

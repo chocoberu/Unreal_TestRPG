@@ -12,6 +12,7 @@ enum class EPlayerAnimState : uint8
 	E_Idle = 0 UMETA(DisplayName = "Idle"),
 	E_QSkill UMETA(DisplayName = "Q Skill"),
 	E_ESkill UMETA(DIsplayName = "E Skill"),
+	E_MRButtonSkill UMETA(DisplayName = "Mouse R Skill"),
 	E_Dead UMETA(DisplayName = "Dead"),
 };
 
@@ -63,7 +64,7 @@ protected:
 
 	int32 CurNormalAttackIndex;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	EPlayerAnimState PlayerAnimState;
 
 private:
