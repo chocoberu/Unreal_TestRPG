@@ -26,3 +26,7 @@ void ATwinGunnerUltimateGun::Tick(float DeltaTime)
 
 }
 
+void ATwinGunnerUltimateGun::SetWeaponVisible(bool NewFlag)
+{
+
+}

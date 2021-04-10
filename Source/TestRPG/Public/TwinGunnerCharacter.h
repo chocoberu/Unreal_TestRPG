@@ -37,6 +37,10 @@ protected:
 	void Shift();
 	void ESkill();
 	void QSkill();
+	void QSkillReleased();
+
+	UFUNCTION()
+	void SpawnUltimateGun();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
 	float AttackRange;

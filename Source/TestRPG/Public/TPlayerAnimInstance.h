@@ -16,9 +16,18 @@ enum class EPlayerAnimState : uint8
 	E_Dead UMETA(DisplayName = "Dead"),
 };
 
+UENUM(BlueprintType)
+enum class EChargeSkillState : uint8
+{
+	E_Idle = 0 UMETA(DisplayName = "Idle"),
+	E_Charging UMETA(DisplayName = "Charging"),
+	E_Fire UMETA(DisplayName = "Fire"),
+};
+
 using FOnNormalAttackHitCheckDelegate = TMulticastDelegate<void()>;
 using FOnQSkillCheckDelegate = TMulticastDelegate<void()>;
 using FOnQSkillEndDelegate = TMulticastDelegate<void()>;
+using FOnESkillStartDelegate = TMulticastDelegate<void()>;
 using FOnESkillEndDelegate = TMulticastDelegate<void()>;
 /**
  * 
@@ -39,8 +48,10 @@ public:
 	void PlayQSkill();
 
 	void SetDeadAnim() { bIsDead = true; }
+	void SetChargeEnd();
 	
 	FOnNormalAttackHitCheckDelegate OnNormalAttackHitCheckDelegate;
+	FOnESkillStartDelegate OnESkillStartDelegate;
 	FOnESkillEndDelegate OnESkillEndDelegate;
 	FOnQSkillCheckDelegate OnQSkillCheckDelegate;
 	FOnQSkillEndDelegate OnQSkillEndDelegate;
@@ -67,9 +78,15 @@ protected:
 	UPROPERTY(BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	EPlayerAnimState PlayerAnimState;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	EChargeSkillState ChargeSkillState;
+
 private:
 	UFUNCTION()
 	void AnimNotify_NormalAttackCheck();
+
+	UFUNCTION()
+	void AnimNotify_ESkillStart();
 
 	UFUNCTION()
 	void AnimNotify_ESkillEnd();
@@ -83,4 +100,6 @@ private:
 	UFUNCTION()
 	void AnimNotify_QSkillEnd();
 
+	UFUNCTION()
+	void AnimNotify_SetCharging();
 };

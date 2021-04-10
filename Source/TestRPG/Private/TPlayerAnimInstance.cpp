@@ -8,6 +8,7 @@ UTPlayerAnimInstance::UTPlayerAnimInstance()
 	bIsDead = false;
 	CurNormalAttackIndex = 0;
 	PlayerAnimState = EPlayerAnimState::E_Idle;
+	ChargeSkillState = EChargeSkillState::E_Idle;
 }
 
 void UTPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -38,8 +39,8 @@ void UTPlayerAnimInstance::PlayShift()
 
 void UTPlayerAnimInstance::PlayESkill()
 {
-	/*if (ESkillMontage != nullptr)
-		Montage_Play(ESkillMontage, 1.0f);*/
+	if (ESkillMontage != nullptr)
+		Montage_Play(ESkillMontage, 1.0f);
 	
 	PlayerAnimState = EPlayerAnimState::E_ESkill;
 	CurNormalAttackIndex = 0;
@@ -49,13 +50,18 @@ void UTPlayerAnimInstance::PlayQSkill()
 {
 	if (QSkillMontage != nullptr)
 		Montage_Play(QSkillMontage, 1.0f);
-
+	PlayerAnimState = EPlayerAnimState::E_QSkill;
 	CurNormalAttackIndex = 0;
 }
 
 void UTPlayerAnimInstance::AnimNotify_NormalAttackCheck()
 {
 	OnNormalAttackHitCheckDelegate.Broadcast();
+}
+
+void UTPlayerAnimInstance::AnimNotify_ESkillStart()
+{
+	OnESkillStartDelegate.Broadcast();
 }
 
 void UTPlayerAnimInstance::AnimNotify_ESkillEnd()
@@ -76,6 +82,23 @@ void UTPlayerAnimInstance::AnimNotify_QSkillCheck()
 
 void UTPlayerAnimInstance::AnimNotify_QSkillEnd()
 {
-	OnQSkillEndDelegate.Broadcast();
 	PlayerAnimState = EPlayerAnimState::E_Idle;
+	ChargeSkillState = EChargeSkillState::E_Idle;
+	OnQSkillEndDelegate.Broadcast();
+}
+
+void UTPlayerAnimInstance::SetChargeEnd()
+{
+	if (ChargeSkillState == EChargeSkillState::E_Charging)
+		ChargeSkillState = EChargeSkillState::E_Fire;
+	else
+		ChargeSkillState = EChargeSkillState::E_Charging;
+}
+
+void UTPlayerAnimInstance::AnimNotify_SetCharging()
+{
+	if (ChargeSkillState == EChargeSkillState::E_Charging)
+		ChargeSkillState = EChargeSkillState::E_Fire;
+	else
+		ChargeSkillState = EChargeSkillState::E_Charging;
 }

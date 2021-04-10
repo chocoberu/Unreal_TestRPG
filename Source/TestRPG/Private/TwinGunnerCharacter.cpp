@@ -31,6 +31,7 @@ void ATwinGunnerCharacter::BeginPlay()
 	AnimInstance->OnESkillEndDelegate.AddUObject(this, &ATwinGunnerCharacter::SetESkillEnd);
 	AnimInstance->OnQSkillCheckDelegate.AddUObject(this, &ATwinGunnerCharacter::QSkillCheck);
 	AnimInstance->OnQSkillEndDelegate.AddUObject(this, &ATwinGunnerCharacter::SetQSkillEnd);
+	AnimInstance->OnESkillStartDelegate.AddUObject(this, &ATwinGunnerCharacter::SpawnUltimateGun);
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -60,6 +61,7 @@ void ATwinGunnerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("Shift", EInputEvent::IE_Pressed, this, &ATwinGunnerCharacter::Shift);
 	PlayerInputComponent->BindAction("E", EInputEvent::IE_Pressed, this, &ATwinGunnerCharacter::ESkill);
 	PlayerInputComponent->BindAction("Q", EInputEvent::IE_Pressed, this, &ATwinGunnerCharacter::QSkill);
+	PlayerInputComponent->BindAction("Q", EInputEvent::IE_Released, this, &ATwinGunnerCharacter::QSkillReleased);
 }
 
 void ATwinGunnerCharacter::NormalAttack()
@@ -99,12 +101,19 @@ void ATwinGunnerCharacter::Shift()
 	
 }
 
+void ATwinGunnerCharacter::SpawnUltimateGun()
+{
+	if (AnimInstance != nullptr)
+	{
+		UltimateGun->SetActorHiddenInGame(false);
+	}
+}
+
 void ATwinGunnerCharacter::ESkill()
 {
 	if (AnimInstance != nullptr)
 	{
 		AnimInstance->PlayESkill();
-		UltimateGun->SetActorHiddenInGame(false);
 		TwinGunnerPlayerState = ETwinGunnerState::E_UltimateGun;
 	}
 }
@@ -124,6 +133,14 @@ void ATwinGunnerCharacter::QSkill()
 	{
 		AnimInstance->PlayQSkill();
 		TwinGunnerPlayerState = ETwinGunnerState::E_ChargeBlast;
+	}
+}
+
+void ATwinGunnerCharacter::QSkillReleased()
+{
+	if (AnimInstance != nullptr)
+	{
+		AnimInstance->SetChargeEnd();
 	}
 }
 
