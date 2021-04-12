@@ -48,6 +48,9 @@ void UTPlayerAnimInstance::PlayESkill()
 
 void UTPlayerAnimInstance::PlayQSkill()
 {
+	/*if (PlayerAnimState == EPlayerAnimState::E_QSkill)
+		return;*/
+
 	if (QSkillMontage != nullptr)
 		Montage_Play(QSkillMontage, 1.0f);
 	PlayerAnimState = EPlayerAnimState::E_QSkill;
@@ -89,7 +92,10 @@ void UTPlayerAnimInstance::AnimNotify_QSkillEnd()
 
 void UTPlayerAnimInstance::SetChargeEnd()
 {
-	if (ChargeSkillState == EChargeSkillState::E_Charging)
+	if (ChargeSkillState == EChargeSkillState::E_Fire)
+		return;
+
+	else if (ChargeSkillState == EChargeSkillState::E_Charging)
 		ChargeSkillState = EChargeSkillState::E_Fire;
 	else
 		ChargeSkillState = EChargeSkillState::E_Charging;

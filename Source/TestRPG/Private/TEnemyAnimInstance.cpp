@@ -13,3 +13,9 @@ void UTEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
 }
+
+void UTEnemyAnimInstance::PlayHitMontage()
+{
+	if (HitMontage != nullptr)
+		Montage_Play(HitMontage, 1.2f);
+}

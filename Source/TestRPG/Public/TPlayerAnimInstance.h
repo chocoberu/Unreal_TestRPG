@@ -42,13 +42,13 @@ public:
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
-	void PlayNormalAttack();
-	void PlayShift();
-	void PlayESkill();
-	void PlayQSkill();
+	virtual void PlayNormalAttack();
+	virtual void PlayShift();
+	virtual void PlayESkill();
+	virtual void PlayQSkill();
 
 	void SetDeadAnim() { bIsDead = true; }
-	void SetChargeEnd();
+	virtual void SetChargeEnd();
 	
 	FOnNormalAttackHitCheckDelegate OnNormalAttackHitCheckDelegate;
 	FOnESkillStartDelegate OnESkillStartDelegate;
@@ -81,25 +81,26 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	EChargeSkillState ChargeSkillState;
 
-private:
-	UFUNCTION()
-	void AnimNotify_NormalAttackCheck();
+protected:
 
 	UFUNCTION()
-	void AnimNotify_ESkillStart();
+	virtual void AnimNotify_NormalAttackCheck();
 
 	UFUNCTION()
-	void AnimNotify_ESkillEnd();
+	virtual void AnimNotify_ESkillStart();
 
 	UFUNCTION()
-	void AnimNotify_ResetNormalAttack();
+	virtual void AnimNotify_ESkillEnd();
 
 	UFUNCTION()
-	void AnimNotify_QSkillCheck();
+	virtual void AnimNotify_ResetNormalAttack();
 
 	UFUNCTION()
-	void AnimNotify_QSkillEnd();
+	virtual void AnimNotify_QSkillCheck();
 
 	UFUNCTION()
-	void AnimNotify_SetCharging();
+	virtual void AnimNotify_QSkillEnd();
+
+	UFUNCTION()
+	virtual void AnimNotify_SetCharging();
 };

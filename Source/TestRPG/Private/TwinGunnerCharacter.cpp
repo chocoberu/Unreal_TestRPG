@@ -16,6 +16,8 @@ ATwinGunnerCharacter::ATwinGunnerCharacter()
 	MuzzleSocket = TEXT("Muzzle_01");
 	TwinGunnerPlayerState = ETwinGunnerState::E_Idle;
 	UltimateGunSokcet = FName(TEXT("FX_Ult_Reticule_Main"));
+
+	bQSkillEnd = true;
 }
 
 void ATwinGunnerCharacter::BeginPlay()
@@ -126,7 +128,7 @@ void ATwinGunnerCharacter::SetESkillEnd()
 
 void ATwinGunnerCharacter::QSkill()
 {
-	if (TwinGunnerPlayerState == ETwinGunnerState::E_ChargeBlast)
+	if (TwinGunnerPlayerState != ETwinGunnerState::E_Idle)
 		return;
 
 	if (AnimInstance != nullptr)
@@ -138,15 +140,19 @@ void ATwinGunnerCharacter::QSkill()
 
 void ATwinGunnerCharacter::QSkillReleased()
 {
+	if (TwinGunnerPlayerState != ETwinGunnerState::E_ChargeBlast || !bQSkillEnd)
+		return;
 	if (AnimInstance != nullptr)
 	{
 		AnimInstance->SetChargeEnd();
+		bQSkillEnd = false;
 	}
 }
 
 void ATwinGunnerCharacter::SetQSkillEnd()
 {
 	TwinGunnerPlayerState = ETwinGunnerState::E_Idle;
+	bQSkillEnd = true;
 }
 
 void ATwinGunnerCharacter::NormalAttackCheck()

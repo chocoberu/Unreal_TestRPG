@@ -22,8 +22,16 @@ public:
 	
 	void SetDeadAnim() { bIsDead = true; }
 
+	void PlayHitMontage();
+
 protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 	bool bIsDead;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	TArray<UAnimMontage*> NormalAttackArray;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	UAnimMontage* HitMontage;
 };

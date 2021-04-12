@@ -60,6 +60,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	FName UltimateGunSokcet;
 
+	bool bQSkillEnd;
+
 private:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))

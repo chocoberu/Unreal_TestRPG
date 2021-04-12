@@ -24,8 +24,19 @@ void ATBaseEnemyCharacter::BeginPlay()
 	
 }
 
+void ATBaseEnemyCharacter::PlayHitMontage()
+{
+
+}
+
 void ATBaseEnemyCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, float Health, float HealthDelta, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
+	if (Health > 0.0f)
+	{
+		PlayHitMontage();
+		return;
+	}
+
 	if (Health <= 0.0f && !bDied)
 	{
 		bDied = true;
