@@ -6,6 +6,7 @@
 #include "TBaseEnemyCharacter.h"
 #include "SwordEnemyCharacter.generated.h"
 
+class ATWeapon;
 /**
  * 
  */
@@ -24,8 +25,20 @@ protected:
 
 	virtual void PlayHitMontage();
 
+	// Components
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UTEnemyAnimInstance* EnemyAnimInstance;
+
+	// Weapon
+	UPROPERTY()
+	ATWeapon* CurrentWeapon;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	TSubclassOf<ATWeapon> WeaponClass;
+
+	UPROPERTY(EditAnywhere, Category = "Player")
+	FName RightWeaponAttachSocketName;
 
 public:
 	// Called every frame
