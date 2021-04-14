@@ -12,6 +12,7 @@ void UTEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
+	CurrentSpeed = GetOwningActor()->GetVelocity().Size();
 }
 
 void UTEnemyAnimInstance::PlayHitMontage()
