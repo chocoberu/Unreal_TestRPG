@@ -11,16 +11,18 @@ AEnemyAIController::AEnemyAIController()
 void AEnemyAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
+	RunAI();
 }
 
 void AEnemyAIController::BeginPlay()
 {
-	RunBehaviorTree(BTAsset);
+	Super::BeginPlay();
 }
 
 void AEnemyAIController::RunAI()
 {
 	UseBlackboard(BBAsset, Blackboard);
+	RunBehaviorTree(BTAsset);
 }
 
 void AEnemyAIController::StopAI()
