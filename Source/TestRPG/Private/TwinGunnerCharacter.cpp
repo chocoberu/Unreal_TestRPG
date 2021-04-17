@@ -99,42 +99,45 @@ void ATwinGunnerCharacter::Shift()
 	else
 		UE_LOG(LogTemp, Error, TEXT("AnimInstance is nullptr"));
 
-	//GetCharacterMovement()->
-	
 }
 
 void ATwinGunnerCharacter::SpawnUltimateGun()
 {
 	if (AnimInstance != nullptr)
-	{
-		UltimateGun->SetActorHiddenInGame(false);
-	}
+		UltimateGun->StartUltimaeAttack();
 }
 
 void ATwinGunnerCharacter::ESkill()
 {
+	if (bESkill || TwinGunnerPlayerState != ETwinGunnerState::E_Idle)
+		return;
 	if (AnimInstance != nullptr)
 	{
 		AnimInstance->PlayESkill();
 		TwinGunnerPlayerState = ETwinGunnerState::E_UltimateGun;
+
+		bESkill = true;
 	}
 }
 
 void ATwinGunnerCharacter::SetESkillEnd()
 {
-	UltimateGun->SetActorHiddenInGame(true);
+	UltimateGun->EndUltimateAttack();
 	TwinGunnerPlayerState = ETwinGunnerState::E_Idle;
+	GetWorldTimerManager().SetTimer(ESkillTimer, this, &APlayerCharacter::SetESkillEnd, ESkillCoolTime, false);
 }
 
 void ATwinGunnerCharacter::QSkill()
 {
-	if (TwinGunnerPlayerState != ETwinGunnerState::E_Idle)
+	if (bQSkill || TwinGunnerPlayerState != ETwinGunnerState::E_Idle)
 		return;
 
 	if (AnimInstance != nullptr)
 	{
 		AnimInstance->PlayQSkill();
 		TwinGunnerPlayerState = ETwinGunnerState::E_ChargeBlast;
+		bQSkill = true;
+		
 	}
 }
 
@@ -146,6 +149,7 @@ void ATwinGunnerCharacter::QSkillReleased()
 	{
 		AnimInstance->SetChargeEnd();
 		bQSkillEnd = false;
+		
 	}
 }
 
@@ -153,6 +157,7 @@ void ATwinGunnerCharacter::SetQSkillEnd()
 {
 	TwinGunnerPlayerState = ETwinGunnerState::E_Idle;
 	bQSkillEnd = true;
+	GetWorldTimerManager().SetTimer(QSkillTimer, this, &APlayerCharacter::SetQSkillEnd, QSkillCoolTime, false);
 }
 
 void ATwinGunnerCharacter::NormalAttackCheck()
@@ -161,14 +166,6 @@ void ATwinGunnerCharacter::NormalAttackCheck()
 
 	FCollisionQueryParams Params(NAME_None, false, this);
 
-	//for (TObjectIterator<ANBBaseCharacter> It; It; ++It)
-	//{
-	//	if ((*It)->GetMyTeam() == MyTeam)
-	//	{
-	//		Params.AddIgnoredActor(*It);
-	//		
-	//	}
-	//}
 	FRotator AttackRot = Controller->GetControlRotation();
 	FVector AttackStart;
 	GetActorEyesViewPoint(AttackStart, AttackRot);
@@ -205,6 +202,12 @@ void ATwinGunnerCharacter::NormalAttackCheck()
 			// 타격 파티클 생성
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), NormalAttackHitParticle, HitResult.ImpactPoint, HitResult.ImpactNormal.Rotation());
 		}
+	}
+	else
+	{
+		// No Hit 파티클 생성
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), NormalAttackNoHitParticle, AttackEnd, FRotator::ZeroRotator);
+		//NormalAttackNoHitParticle
 	}
 }
 void ATwinGunnerCharacter::QSkillCheck()
@@ -249,4 +252,11 @@ void ATwinGunnerCharacter::QSkillCheck()
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), QSkillHitParticle, HitResult.ImpactPoint, HitResult.ImpactNormal.Rotation());
 		}
 	}
+	else
+	{
+		// No Hit 파티클 생성
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), QSkillNoHitParticle, AttackEnd, FRotator::ZeroRotator);
+		//NormalAttackNoHitParticle
+	}
+	
 }

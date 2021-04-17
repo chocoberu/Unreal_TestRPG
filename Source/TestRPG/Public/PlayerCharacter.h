@@ -51,14 +51,28 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Attack")
 	bool bShift;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Attack")
+	bool bQSkill;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Attack")
+	bool bESkill;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
 	float NormalAttackCoolTime;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
 	float ShiftSkillCoolTime;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
+	float QSkillCoolTime;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
+	float ESkillCoolTime;
+
 	FTimerHandle NormalAttackTimer;
 	FTimerHandle ShiftTimer;
+	FTimerHandle QSkillTimer;
+	FTimerHandle ESkillTimer;
 
 public:	
 	// Called every frame
@@ -69,5 +83,7 @@ public:
 
 	void SetNormalAttackEnd();
 	void SetShiftSkillEnd();
+	void SetQSkillEnd();
+	void SetESkillEnd();
 	
 };

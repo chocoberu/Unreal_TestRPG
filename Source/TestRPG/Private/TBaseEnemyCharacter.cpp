@@ -6,6 +6,9 @@
 #include "TEnemyAnimInstance.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Perception/AIPerceptionComponent.h"
+#include "Perception/AISenseConfig.h"
+#include "Perception/AISenseConfig_Sight.h"
 
 // Sets default values
 ATBaseEnemyCharacter::ATBaseEnemyCharacter()
@@ -15,6 +18,9 @@ ATBaseEnemyCharacter::ATBaseEnemyCharacter()
 
 	HealthComponent = CreateDefaultSubobject<UTHealthComponent>(TEXT("HealthComp"));
 	HealthComponent->OnHealthChanged.AddUObject(this, &ATBaseEnemyCharacter::OnHealthChanged);
+
+	AIPerceptionComponent = CreateDefaultSubobject< UAIPerceptionComponent>(TEXT("AIPerception"));
+	//AIPerceptionComponent->OnTargetPerceptionUpdated.
 }
 
 // Called when the game starts or when spawned

@@ -98,3 +98,12 @@ void APlayerCharacter::SetShiftSkillEnd()
 	bShift = false;
 }
 
+void APlayerCharacter::SetQSkillEnd()
+{
+	bQSkill = false;
+}
+
+void APlayerCharacter::SetESkillEnd()
+{
+	bESkill = false;
+}
