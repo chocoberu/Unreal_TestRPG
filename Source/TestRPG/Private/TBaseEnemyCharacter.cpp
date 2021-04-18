@@ -19,7 +19,7 @@ ATBaseEnemyCharacter::ATBaseEnemyCharacter()
 	HealthComponent = CreateDefaultSubobject<UTHealthComponent>(TEXT("HealthComp"));
 	HealthComponent->OnHealthChanged.AddUObject(this, &ATBaseEnemyCharacter::OnHealthChanged);
 
-	AIPerceptionComponent = CreateDefaultSubobject< UAIPerceptionComponent>(TEXT("AIPerception"));
+	AIPerceptionComponent = CreateDefaultSubobject< UAIPerceptionComponent>(TEXT("AIPerceptionComp"));
 	//AIPerceptionComponent->OnTargetPerceptionUpdated.
 }
 
@@ -27,6 +27,7 @@ ATBaseEnemyCharacter::ATBaseEnemyCharacter()
 void ATBaseEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	//AIPerceptionComponent->Activate();
 	
 }
 

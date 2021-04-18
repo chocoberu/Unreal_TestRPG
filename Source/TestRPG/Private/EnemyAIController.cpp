@@ -11,7 +11,7 @@ AEnemyAIController::AEnemyAIController()
 void AEnemyAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-	RunAI();
+	//RunAI();
 }
 
 void AEnemyAIController::BeginPlay()

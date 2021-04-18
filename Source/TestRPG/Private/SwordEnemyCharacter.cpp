@@ -4,10 +4,12 @@
 #include "SwordEnemyCharacter.h"
 #include "TEnemyAnimInstance.h"
 #include "TWeapon.h"
+#include "EnemyAIController.h"
 
 ASwordEnemyCharacter::ASwordEnemyCharacter()
 {
 	RightWeaponAttachSocketName = "hand_rWeaponSocket";
+	
 }
 
 void ASwordEnemyCharacter::BeginPlay()
@@ -25,6 +27,12 @@ void ASwordEnemyCharacter::BeginPlay()
 	{
 		CurrentWeapon->SetOwner(this);
 		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, RightWeaponAttachSocketName);
+	}
+
+	auto EnemyAIController = Cast<AEnemyAIController>(GetController());
+	if (EnemyAIController != nullptr)
+	{
+		EnemyAIController->RunAI();
 	}
 }
 
