@@ -37,8 +37,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UTHealthComponent* HealthComponent;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	class UAIPerceptionComponent* AIPerceptionComponent;
+	/*UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	class UAIPerceptionComponent* AIPerceptionComponent;*/
 
 	UPROPERTY(BlueprintReadOnly, Category = "Player")
 	bool bDied;
@@ -50,4 +50,5 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual void NormalAttack();
 };

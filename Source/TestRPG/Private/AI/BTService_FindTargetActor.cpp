@@ -33,6 +33,7 @@ void UBTService_FindTargetActor::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 	//AIPerceptionComp->GetPerceivedActors(nullptr, ActorArray);
 
 	UE_LOG(LogTemp, Log, TEXT("Perceived Actors : %d"), ActorArray.Num());
+	OwnerComp.GetBlackboardComponent()->SetValueAsObject(TEXT("TargetActor"), nullptr);
 
 	for (auto TargetActor : ActorArray)
 	{

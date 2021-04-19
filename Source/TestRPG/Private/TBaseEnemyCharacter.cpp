@@ -19,7 +19,7 @@ ATBaseEnemyCharacter::ATBaseEnemyCharacter()
 	HealthComponent = CreateDefaultSubobject<UTHealthComponent>(TEXT("HealthComp"));
 	HealthComponent->OnHealthChanged.AddUObject(this, &ATBaseEnemyCharacter::OnHealthChanged);
 
-	AIPerceptionComponent = CreateDefaultSubobject< UAIPerceptionComponent>(TEXT("AIPerceptionComp"));
+	//AIPerceptionComponent = CreateDefaultSubobject< UAIPerceptionComponent>(TEXT("AIPerceptionComp"));
 	//AIPerceptionComponent->OnTargetPerceptionUpdated.
 }
 
@@ -72,5 +72,10 @@ void ATBaseEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void ATBaseEnemyCharacter::NormalAttack()
+{
+	UE_LOG(LogTemp, Log, TEXT("TODO : Enemy Normal Attack"));
 }
 
