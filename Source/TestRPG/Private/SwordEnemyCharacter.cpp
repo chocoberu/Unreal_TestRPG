@@ -5,11 +5,12 @@
 #include "TEnemyAnimInstance.h"
 #include "TWeapon.h"
 #include "EnemyAIController.h"
+#include "DrawDebugHelpers.h"
 
 ASwordEnemyCharacter::ASwordEnemyCharacter()
 {
 	RightWeaponAttachSocketName = "hand_rWeaponSocket";
-	
+	AttackDamage = 10.0f;
 }
 
 void ASwordEnemyCharacter::BeginPlay()
@@ -17,6 +18,7 @@ void ASwordEnemyCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	EnemyAnimInstance = Cast<UTEnemyAnimInstance>(GetMesh()->GetAnimInstance());
+	EnemyAnimInstance->OnNormalAttackHitCheckDelegate.AddUObject(this, &ASwordEnemyCharacter::NormalAttackCheck);
 
 	// Spawn a default weapon
 	FActorSpawnParameters SpawnParams;
@@ -50,4 +52,64 @@ void ASwordEnemyCharacter::Tick(float DeltaTime)
 void ASwordEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+void ASwordEnemyCharacter::NormalAttack()
+{
+	Super::NormalAttack();
+	UE_LOG(LogTemp, Log, TEXT("SwordEnemyCharacter Normal Attack"));
+
+	EnemyAnimInstance->PlayNormalAttackMontage();
+}
+
+void ASwordEnemyCharacter::NormalAttackCheck()
+{
+	FHitResult HitResult;
+
+	FCollisionQueryParams Params(NAME_None, false, this);
+	bool bResult = GetWorld()->SweepSingleByChannel(
+		HitResult,
+		GetActorLocation(), // 시작점
+		GetActorLocation() + GetActorForwardVector() * 50.0f, // 끝점
+		FQuat::Identity, // 회전값
+		ECollisionChannel::ECC_GameTraceChannel2, // 트레이스채널
+		FCollisionShape::MakeSphere(50.0f),
+		Params);
+
+	// 공격 판정 범위를 DrawDebugCapsule로 표시
+#if ENABLE_DRAW_DEBUG
+	FVector TraceVec = GetActorForwardVector() * 50.0f;
+	FVector Center = GetActorLocation() + TraceVec * 0.5f;
+	float HalfHeight = 50.0f * 0.5f + 50.0f;
+	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
+	float DebugLifeTime = 5.0f;
+
+	DrawDebugCapsule(GetWorld(),
+		Center,
+		HalfHeight,
+		50.0f,
+		CapsuleRot,
+		DrawColor,
+		false,
+		DebugLifeTime);
+#endif
+
+	if (bResult)
+	{
+		if (HitResult.Actor.IsValid())
+		{
+			auto Character = Cast<ACharacter>(HitResult.Actor.Get());
+			if (Character == nullptr)
+				return;
+
+			UE_LOG(LogTemp, Log, TEXT("SwordEnemy : %s attack"), *Character->GetName());
+
+			FDamageEvent DamageEvent;
+			HitResult.Actor->TakeDamage(AttackDamage, // 데미지 크기
+				DamageEvent, // 데미지 종류
+				GetController(), // 가해자 (컨트롤러)
+				this); // 데미지 전달을 위해 사용한 도구 (액터)
+		}
+	}
 }

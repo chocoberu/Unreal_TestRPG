@@ -60,6 +60,12 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	FName UltimateGunSokcet;
 
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	float NormalAttackDamage;
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	float QSkillAttackDamage;
+
 	bool bQSkillEnd;
 
 

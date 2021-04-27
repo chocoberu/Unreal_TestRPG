@@ -18,6 +18,9 @@ ATwinGunnerCharacter::ATwinGunnerCharacter()
 	UltimateGunSokcet = FName(TEXT("FX_Ult_Reticule_Main"));
 
 	bQSkillEnd = true;
+
+	NormalAttackDamage = 10.0f;
+	QSkillAttackDamage = 30.0f;
 }
 
 void ATwinGunnerCharacter::BeginPlay()
@@ -194,7 +197,7 @@ void ATwinGunnerCharacter::NormalAttackCheck()
 			UE_LOG(LogTemp, Log, TEXT("%s attack"), *Character->GetName());
 			
 			FDamageEvent DamageEvent;
-			HitResult.Actor->TakeDamage(10.0f, // 데미지 크기
+			HitResult.Actor->TakeDamage(NormalAttackDamage, // 데미지 크기
 				DamageEvent, // 데미지 종류
 				GetController(), // 가해자 (컨트롤러)
 				this); // 데미지 전달을 위해 사용한 도구 (액터)
@@ -243,7 +246,7 @@ void ATwinGunnerCharacter::QSkillCheck()
 			UE_LOG(LogTemp, Log, TEXT("%s attack"), *Character->GetName());
 
 			FDamageEvent DamageEvent;
-			HitResult.Actor->TakeDamage(30.0f, // 데미지 크기
+			HitResult.Actor->TakeDamage(QSkillAttackDamage, // 데미지 크기
 				DamageEvent, // 데미지 종류
 				GetController(), // 가해자 (컨트롤러)
 				this); // 데미지 전달을 위해 사용한 도구 (액터)
@@ -256,7 +259,6 @@ void ATwinGunnerCharacter::QSkillCheck()
 	{
 		// No Hit 파티클 생성
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), QSkillNoHitParticle, AttackEnd, FRotator::ZeroRotator);
-		//NormalAttackNoHitParticle
 	}
 	
 }

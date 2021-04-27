@@ -6,6 +6,7 @@
 #include "Animation/AnimInstance.h"
 #include "TEnemyAnimInstance.generated.h"
 
+using FOnNormalAttackHitCheckDelegate = TMulticastDelegate<void()>;
 /**
  * 
  */
@@ -24,6 +25,12 @@ public:
 
 	void PlayHitMontage();
 
+	void PlayNormalAttackMontage();
+
+	// µ®∏Æ∞‘¿Ã∆Æ
+
+	FOnNormalAttackHitCheckDelegate OnNormalAttackHitCheckDelegate;
+
 protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
@@ -37,4 +44,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", Meta = (AllowPrivateAccess = true))
 	float CurrentSpeed;
+
+	UFUNCTION()
+	void AnimNotify_NormalAttackCheck();
 };

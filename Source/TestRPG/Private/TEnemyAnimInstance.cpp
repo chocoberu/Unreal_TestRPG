@@ -20,3 +20,14 @@ void UTEnemyAnimInstance::PlayHitMontage()
 	if (HitMontage != nullptr)
 		Montage_Play(HitMontage, 1.2f);
 }
+
+void UTEnemyAnimInstance::PlayNormalAttackMontage()
+{
+	if (NormalAttackArray.Num() > 0 && NormalAttackArray[0] != nullptr)
+		Montage_Play(NormalAttackArray[0], 1.0f);
+}
+
+void UTEnemyAnimInstance::AnimNotify_NormalAttackCheck()
+{
+	OnNormalAttackHitCheckDelegate.Broadcast();
+}

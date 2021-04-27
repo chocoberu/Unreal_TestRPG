@@ -40,10 +40,18 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Player")
 	FName RightWeaponAttachSocketName;
 
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	float AttackDamage;
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual void NormalAttack() override;
+
+	UFUNCTION()
+	void NormalAttackCheck();
 };
