@@ -19,6 +19,8 @@ ATBaseEnemyCharacter::ATBaseEnemyCharacter()
 	HealthComponent = CreateDefaultSubobject<UTHealthComponent>(TEXT("HealthComp"));
 	HealthComponent->OnHealthChanged.AddUObject(this, &ATBaseEnemyCharacter::OnHealthChanged);
 
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("TestRPGCharacter"));
+
 	//AIPerceptionComponent = CreateDefaultSubobject< UAIPerceptionComponent>(TEXT("AIPerceptionComp"));
 	//AIPerceptionComponent->OnTargetPerceptionUpdated.
 }

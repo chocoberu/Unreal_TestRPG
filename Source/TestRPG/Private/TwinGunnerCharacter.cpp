@@ -163,28 +163,37 @@ void ATwinGunnerCharacter::SetQSkillEnd()
 	GetWorldTimerManager().SetTimer(QSkillTimer, this, &APlayerCharacter::SetQSkillEnd, QSkillCoolTime, false);
 }
 
-void ATwinGunnerCharacter::NormalAttackCheck()
+bool ATwinGunnerCharacter::LineAttackCheck(FHitResult& HitResult, FVector& AttackEnd, float SkillRange, float SkillRadius)
 {
-	FHitResult HitResult;
-
 	FCollisionQueryParams Params(NAME_None, false, this);
 
-	FRotator AttackRot = Controller->GetControlRotation();
+	FRotator AttackRot; //= Controller->GetControlRotation();
 	FVector AttackStart;
 	GetActorEyesViewPoint(AttackStart, AttackRot);
-	FVector AttackEnd = AttackStart + AttackRot.Vector() * AttackRange;
-	
+	AttackEnd = AttackStart + AttackRot.Vector() * SkillRange;
+
 	bool bResult = GetWorld()->SweepSingleByChannel(
 		HitResult,
 		AttackStart, // 시작점
 		AttackEnd, // 끝점
 		FQuat::Identity, // 회전값
 		ECollisionChannel::ECC_GameTraceChannel2, // 트레이스채널
-		FCollisionShape::MakeSphere(AttackRadius),
+		FCollisionShape::MakeSphere(SkillRadius),
 		Params);
 
+	// Debug 관련
 	FColor DebugColor = bResult ? FColor::Green : FColor::Red;
 	DrawDebugLine(GetWorld(), AttackStart, AttackEnd, DebugColor, false, 1.0f);
+
+	return bResult;
+}
+
+void ATwinGunnerCharacter::NormalAttackCheck()
+{
+	FHitResult HitResult;
+	FVector AttackEnd;
+
+	bool bResult = LineAttackCheck(HitResult, AttackEnd, AttackRange, AttackRadius);
 
 	if (bResult)
 	{
@@ -216,24 +225,9 @@ void ATwinGunnerCharacter::NormalAttackCheck()
 void ATwinGunnerCharacter::QSkillCheck()
 {
 	FHitResult HitResult;
-	FCollisionQueryParams Params(NAME_None, false, this);
+	FVector AttackEnd;
 
-	FRotator AttackRot = Controller->GetControlRotation();
-	FVector AttackStart;
-	GetActorEyesViewPoint(AttackStart, AttackRot);
-	FVector AttackEnd = AttackStart + AttackRot.Vector() * AttackRange * 1.5f;
-
-	bool bResult = GetWorld()->SweepSingleByChannel(
-		HitResult,
-		AttackStart, // 시작점
-		AttackEnd, // 끝점
-		FQuat::Identity, // 회전값
-		ECollisionChannel::ECC_GameTraceChannel2, // 트레이스채널
-		FCollisionShape::MakeSphere(AttackRadius),
-		Params);
-
-	FColor DebugColor = bResult ? FColor::Green : FColor::Red;
-	DrawDebugLine(GetWorld(), AttackStart, AttackEnd, DebugColor, false, 1.0f);
+	bool bResult = LineAttackCheck(HitResult, AttackEnd, AttackRange * 1.5f, AttackRadius);
 
 	if (bResult)
 	{
