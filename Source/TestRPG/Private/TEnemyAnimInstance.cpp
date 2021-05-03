@@ -31,3 +31,13 @@ void UTEnemyAnimInstance::AnimNotify_NormalAttackCheck()
 {
 	OnNormalAttackHitCheckDelegate.Broadcast();
 }
+
+void UTEnemyAnimInstance::AnimNotify_EntranceStart()
+{
+	OnEntranceStartDelegate.Broadcast();
+}
+
+void UTEnemyAnimInstance::AnimNotify_EntranceEnd()
+{
+	OnEntranceEndDelegate.Broadcast();
+}

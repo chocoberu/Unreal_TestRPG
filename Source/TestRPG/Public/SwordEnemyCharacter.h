@@ -43,6 +43,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	float AttackDamage;
 
+	
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

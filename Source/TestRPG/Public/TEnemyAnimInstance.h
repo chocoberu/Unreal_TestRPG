@@ -7,6 +7,8 @@
 #include "TEnemyAnimInstance.generated.h"
 
 using FOnNormalAttackHitCheckDelegate = TMulticastDelegate<void()>;
+using FOnEntranceStartDelegate = TMulticastDelegate<void()>;
+using FOnEntranceEndDelegate = TMulticastDelegate<void()>;
 /**
  * 
  */
@@ -28,8 +30,9 @@ public:
 	void PlayNormalAttackMontage();
 
 	// µ®∏Æ∞‘¿Ã∆Æ
-
 	FOnNormalAttackHitCheckDelegate OnNormalAttackHitCheckDelegate;
+	FOnEntranceStartDelegate OnEntranceStartDelegate;
+	FOnEntranceEndDelegate OnEntranceEndDelegate;
 
 protected:
 
@@ -47,4 +50,10 @@ protected:
 
 	UFUNCTION()
 	void AnimNotify_NormalAttackCheck();
+
+	UFUNCTION()
+	void AnimNotify_EntranceStart();
+
+	UFUNCTION()
+	void AnimNotify_EntranceEnd();
 };
