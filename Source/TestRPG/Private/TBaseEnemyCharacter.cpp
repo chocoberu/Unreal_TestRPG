@@ -6,9 +6,7 @@
 #include "TEnemyAnimInstance.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Perception/AIPerceptionComponent.h"
-#include "Perception/AISenseConfig.h"
-#include "Perception/AISenseConfig_Sight.h"
+#include "EnemyAIController.h"
 
 // Sets default values
 ATBaseEnemyCharacter::ATBaseEnemyCharacter()
@@ -21,16 +19,13 @@ ATBaseEnemyCharacter::ATBaseEnemyCharacter()
 
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("TestRPGCharacter"));
 
-	//AIPerceptionComponent = CreateDefaultSubobject< UAIPerceptionComponent>(TEXT("AIPerceptionComp"));
-	//AIPerceptionComponent->OnTargetPerceptionUpdated.
 }
 
 // Called when the game starts or when spawned
 void ATBaseEnemyCharacter::BeginPlay()
 {
-	Super::BeginPlay();
-	//AIPerceptionComponent->Activate();
-	
+	Super::BeginPlay();	
+	EnemyAIController = Cast<AEnemyAIController>(GetController());
 }
 
 void ATBaseEnemyCharacter::PlayHitMontage()
@@ -55,6 +50,8 @@ void ATBaseEnemyCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, 
 
 		auto AnimInst = Cast<UTEnemyAnimInstance>(GetMesh()->GetAnimInstance());
 		AnimInst->SetDeadAnim();
+
+		EnemyAIController->StopAI();
 
 		DetachFromControllerPendingDestroy();
 		

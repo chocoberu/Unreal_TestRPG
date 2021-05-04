@@ -91,7 +91,7 @@ private:
 
 	FName MuzzleSocket;
 
-	bool LineAttackCheck(FHitResult& HitResult, FVector& AttackEnd, float SkillRange, float SkillRadius);
+	bool SweepAttackCheck(FHitResult& HitResult, FVector& AttackEnd, float SkillRange, float SkillRadius);
 
 public:
 	// Called every frame

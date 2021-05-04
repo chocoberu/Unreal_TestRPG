@@ -26,7 +26,6 @@ protected:
 	virtual void PlayHitMontage();
 
 	// Components
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UTEnemyAnimInstance* EnemyAnimInstance;
 

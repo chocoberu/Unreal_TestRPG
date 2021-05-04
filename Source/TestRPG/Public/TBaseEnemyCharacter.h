@@ -37,8 +37,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UTHealthComponent* HealthComponent;
 
-	/*UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	class UAIPerceptionComponent* AIPerceptionComponent;*/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	class AEnemyAIController* EnemyAIController;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Player")
 	bool bDied;

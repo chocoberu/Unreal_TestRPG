@@ -163,7 +163,7 @@ void ATwinGunnerCharacter::SetQSkillEnd()
 	GetWorldTimerManager().SetTimer(QSkillTimer, this, &APlayerCharacter::SetQSkillEnd, QSkillCoolTime, false);
 }
 
-bool ATwinGunnerCharacter::LineAttackCheck(FHitResult& HitResult, FVector& AttackEnd, float SkillRange, float SkillRadius)
+bool ATwinGunnerCharacter::SweepAttackCheck(FHitResult& HitResult, FVector& AttackEnd, float SkillRange, float SkillRadius)
 {
 	FCollisionQueryParams Params(NAME_None, false, this);
 
@@ -193,7 +193,7 @@ void ATwinGunnerCharacter::NormalAttackCheck()
 	FHitResult HitResult;
 	FVector AttackEnd;
 
-	bool bResult = LineAttackCheck(HitResult, AttackEnd, AttackRange, AttackRadius);
+	bool bResult = SweepAttackCheck(HitResult, AttackEnd, AttackRange, AttackRadius);
 
 	if (bResult)
 	{
@@ -219,7 +219,6 @@ void ATwinGunnerCharacter::NormalAttackCheck()
 	{
 		// No Hit 파티클 생성
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), NormalAttackNoHitParticle, AttackEnd, FRotator::ZeroRotator);
-		//NormalAttackNoHitParticle
 	}
 }
 void ATwinGunnerCharacter::QSkillCheck()
@@ -227,7 +226,7 @@ void ATwinGunnerCharacter::QSkillCheck()
 	FHitResult HitResult;
 	FVector AttackEnd;
 
-	bool bResult = LineAttackCheck(HitResult, AttackEnd, AttackRange * 1.5f, AttackRadius);
+	bool bResult = SweepAttackCheck(HitResult, AttackEnd, AttackRange * 1.5f, AttackRadius);
 
 	if (bResult)
 	{

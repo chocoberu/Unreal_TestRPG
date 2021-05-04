@@ -31,7 +31,6 @@ void ASwordEnemyCharacter::BeginPlay()
 		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, RightWeaponAttachSocketName);
 	}
 
-	auto EnemyAIController = Cast<AEnemyAIController>(GetController());
 	if (EnemyAIController != nullptr)
 	{
 		EnemyAIController->RunAI();
