@@ -12,7 +12,7 @@ class ATwinGunnerUltimateGun;
  */
 
 UENUM(BlueprintType)
-enum class ETwinGunnerState : uint8
+enum class ETwinGunnerSkillState : uint8
 {
 	E_Idle = 0 UMETA(DisplayName = "Idle"),
 	E_ChargeBlast UMETA(DisplayName = "ChargeBlast"),
@@ -55,7 +55,7 @@ protected:
 	TSubclassOf<ATwinGunnerUltimateGun> UltimateGunClass;
 
 	UPROPERTY(BlueprintReadOnly)
-	ETwinGunnerState TwinGunnerPlayerState;
+	ETwinGunnerSkillState TwinGunnerSkillState;
 
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	FName UltimateGunSokcet;
@@ -66,7 +66,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	float QSkillAttackDamage;
 
-	bool bQSkillEnd;
+	bool bQSkillReleased;
 
 
 private:

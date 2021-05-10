@@ -34,6 +34,7 @@ void UBTService_FindTargetActor::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 
 	UE_LOG(LogTemp, Log, TEXT("Perceived Actors : %d"), ActorArray.Num());
 	OwnerComp.GetBlackboardComponent()->SetValueAsObject(TEXT("TargetActor"), nullptr);
+	OwnerComp.GetBlackboardComponent()->SetValueAsVector(TEXT("NextPos"), ControllingPawn->GetActorLocation());
 
 	if (ActorArray.Num() == 0)
 		return;
@@ -62,4 +63,6 @@ void UBTService_FindTargetActor::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 		}
 	}
 	OwnerComp.GetBlackboardComponent()->SetValueAsObject(TEXT("TargetActor"), FinalTarget);
+	if(FinalTarget != nullptr)
+		OwnerComp.GetBlackboardComponent()->SetValueAsVector(TEXT("NextPos"), FinalTarget->GetActorLocation());
 }

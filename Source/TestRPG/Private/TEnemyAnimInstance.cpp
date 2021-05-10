@@ -41,3 +41,8 @@ void UTEnemyAnimInstance::AnimNotify_EntranceEnd()
 {
 	OnEntranceEndDelegate.Broadcast();
 }
+
+void UTEnemyAnimInstance::AnimNotify_SwingAttackCheck()
+{
+	OnNormalAttackHitCheckDelegate.Broadcast();
+}

@@ -14,10 +14,10 @@ ATwinGunnerCharacter::ATwinGunnerCharacter()
 	AttackRadius = 50.0f;
 
 	MuzzleSocket = TEXT("Muzzle_01");
-	TwinGunnerPlayerState = ETwinGunnerState::E_Idle;
+	TwinGunnerSkillState = ETwinGunnerSkillState::E_Idle;
 	UltimateGunSokcet = FName(TEXT("FX_Ult_Reticule_Main"));
 
-	bQSkillEnd = true;
+	bQSkillReleased = true;
 
 	NormalAttackDamage = 10.0f;
 	QSkillAttackDamage = 30.0f;
@@ -71,7 +71,7 @@ void ATwinGunnerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 void ATwinGunnerCharacter::NormalAttack()
 {
-	if (bNormalAttack || TwinGunnerPlayerState != ETwinGunnerState::E_Idle)
+	if (bNormalAttack || TwinGunnerSkillState != ETwinGunnerSkillState::E_Idle)
 		return;
 	if (AnimInstance != nullptr)
 	{
@@ -86,7 +86,7 @@ void ATwinGunnerCharacter::NormalAttack()
 
 void ATwinGunnerCharacter::Shift()
 {
-	if (bShift || TwinGunnerPlayerState != ETwinGunnerState::E_Idle)
+	if (bShift || TwinGunnerSkillState != ETwinGunnerSkillState::E_Idle)
 		return;
 	if (AnimInstance != nullptr)
 	{
@@ -112,12 +112,12 @@ void ATwinGunnerCharacter::SpawnUltimateGun()
 
 void ATwinGunnerCharacter::ESkill()
 {
-	if (bESkill || TwinGunnerPlayerState != ETwinGunnerState::E_Idle)
+	if (bESkill || TwinGunnerSkillState != ETwinGunnerSkillState::E_Idle)
 		return;
 	if (AnimInstance != nullptr)
 	{
 		AnimInstance->PlayESkill();
-		TwinGunnerPlayerState = ETwinGunnerState::E_UltimateGun;
+		TwinGunnerSkillState = ETwinGunnerSkillState::E_UltimateGun;
 
 		bESkill = true;
 	}
@@ -126,19 +126,19 @@ void ATwinGunnerCharacter::ESkill()
 void ATwinGunnerCharacter::SetESkillEnd()
 {
 	UltimateGun->EndUltimateAttack();
-	TwinGunnerPlayerState = ETwinGunnerState::E_Idle;
+	TwinGunnerSkillState = ETwinGunnerSkillState::E_Idle;
 	GetWorldTimerManager().SetTimer(ESkillTimer, this, &APlayerCharacter::SetESkillEnd, ESkillCoolTime, false);
 }
 
 void ATwinGunnerCharacter::QSkill()
 {
-	if (bQSkill || TwinGunnerPlayerState != ETwinGunnerState::E_Idle)
+	if (bQSkill || TwinGunnerSkillState != ETwinGunnerSkillState::E_Idle)
 		return;
 
 	if (AnimInstance != nullptr)
 	{
 		AnimInstance->PlayQSkill();
-		TwinGunnerPlayerState = ETwinGunnerState::E_ChargeBlast;
+		TwinGunnerSkillState = ETwinGunnerSkillState::E_ChargeBlast;
 		bQSkill = true;
 		
 	}
@@ -146,20 +146,20 @@ void ATwinGunnerCharacter::QSkill()
 
 void ATwinGunnerCharacter::QSkillReleased()
 {
-	if (TwinGunnerPlayerState != ETwinGunnerState::E_ChargeBlast || !bQSkillEnd)
+	if (TwinGunnerSkillState != ETwinGunnerSkillState::E_ChargeBlast || !bQSkillReleased)
 		return;
 	if (AnimInstance != nullptr)
 	{
 		AnimInstance->SetChargeEnd();
-		bQSkillEnd = false;
+		bQSkillReleased = false;
 		
 	}
 }
 
 void ATwinGunnerCharacter::SetQSkillEnd()
 {
-	TwinGunnerPlayerState = ETwinGunnerState::E_Idle;
-	bQSkillEnd = true;
+	TwinGunnerSkillState = ETwinGunnerSkillState::E_Idle;
+	bQSkillReleased = true;
 	GetWorldTimerManager().SetTimer(QSkillTimer, this, &APlayerCharacter::SetQSkillEnd, QSkillCoolTime, false);
 }
 
@@ -167,7 +167,7 @@ bool ATwinGunnerCharacter::SweepAttackCheck(FHitResult& HitResult, FVector& Atta
 {
 	FCollisionQueryParams Params(NAME_None, false, this);
 
-	FRotator AttackRot; //= Controller->GetControlRotation();
+	FRotator AttackRot;
 	FVector AttackStart;
 	GetActorEyesViewPoint(AttackStart, AttackRot);
 	AttackEnd = AttackStart + AttackRot.Vector() * SkillRange;

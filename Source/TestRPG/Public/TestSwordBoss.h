@@ -21,11 +21,26 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	bool SweepAttackCheck(FHitResult& HitResult, FVector& AttackEnd, float SkillRange, float SkillRadius);
+
 	// Components
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UTEnemyAnimInstance* EnemyAnimInstance;
 
 	bool bEntrance;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
+	float AttackRange;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
+	float AttackRadius;
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	float NormalAttackDamage;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character")
+	float DefaultMaxSpeed;
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -42,5 +57,8 @@ public:
 
 	UFUNCTION()
 	void SetEntranceEnd();
+
+	UFUNCTION()
+	void NormalAttackCheck();
 };
 

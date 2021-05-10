@@ -56,4 +56,7 @@ protected:
 
 	UFUNCTION()
 	void AnimNotify_EntranceEnd();
+
+	UFUNCTION()
+	void AnimNotify_SwingAttackCheck();
 };
