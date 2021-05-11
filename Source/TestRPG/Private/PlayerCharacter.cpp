@@ -8,6 +8,8 @@
 #include "Components/CapsuleComponent.h"
 #include "TPlayerAnimInstance.h"
 #include "THealthComponent.h"
+#include "Components/WidgetComponent.h"
+#include "TestHPBarWidget.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -28,6 +30,9 @@ APlayerCharacter::APlayerCharacter()
 	HealthComponent = CreateDefaultSubobject<UTHealthComponent>(TEXT("HealthComp"));
 	HealthComponent->OnHealthChanged.AddUObject(this, &APlayerCharacter::OnHealthChanged);
 
+	HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBarWidget"));
+	HPBarWidget->SetupAttachment(GetMesh());
+
 	bDied = false;
 	bNormalAttack = false;
 	NormalAttackCoolTime = 1.0f;
@@ -39,7 +44,11 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	
+	auto TestHPBarWidget = Cast<UTestHPBarWidget>(HPBarWidget->GetUserWidgetObject());
+	if (TestHPBarWidget != nullptr)
+	{
+		TestHPBarWidget->BindCharacter(HealthComponent);
+	}
 }
 
 void APlayerCharacter::MoveForward(float Value)
@@ -54,6 +63,11 @@ void APlayerCharacter::MoveRight(float Value)
 
 void APlayerCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, float Health, float HealthDelta, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
+	auto TestHPBarWidget = Cast<UTestHPBarWidget>(HPBarWidget->GetUserWidgetObject());
+	if (TestHPBarWidget != nullptr)
+	{
+		TestHPBarWidget->UpdateHPWidget();
+	}
 	if (Health <= 0.0f && !bDied)
 	{
 		bDied = true;

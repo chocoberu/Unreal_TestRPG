@@ -38,6 +38,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	float GetHealth() const;
+	float GetHPRatio() const;
 
 	FOnHealthChangedDelegate OnHealthChanged;
 };

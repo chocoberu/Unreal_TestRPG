@@ -42,6 +42,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UTHealthComponent* HealthComponent;
 
+	UPROPERTY(VisibleAnywhere, Category = "UI")
+	class UWidgetComponent* HPBarWidget;
+
 	UPROPERTY(BlueprintReadOnly, Category = "Player")
 	bool bDied;
 
