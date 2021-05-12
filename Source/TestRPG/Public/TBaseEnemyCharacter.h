@@ -40,6 +40,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class AEnemyAIController* EnemyAIController;
 
+	UPROPERTY(VisibleAnywhere, Category = "UI")
+	class UWidgetComponent* HPBarWidget;
+
+	UPROPERTY(VisibleAnywhere, Category = "UI")
+	class UTestHPBarWidget* HPBarWidgetObject;
+
 	UPROPERTY(BlueprintReadOnly, Category = "Player")
 	bool bDied;
 

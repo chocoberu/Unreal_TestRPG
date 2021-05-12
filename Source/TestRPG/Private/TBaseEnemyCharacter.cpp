@@ -7,6 +7,8 @@
 #include "GameFramework/PawnMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "EnemyAIController.h"
+#include "Components/WidgetComponent.h"
+#include "TestHPBarWidget.h"
 
 // Sets default values
 ATBaseEnemyCharacter::ATBaseEnemyCharacter()
@@ -19,6 +21,9 @@ ATBaseEnemyCharacter::ATBaseEnemyCharacter()
 
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("TestRPGCharacter"));
 
+	HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBarWidget"));
+	HPBarWidget->SetupAttachment(GetMesh());
+	
 }
 
 // Called when the game starts or when spawned
@@ -26,6 +31,12 @@ void ATBaseEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();	
 	EnemyAIController = Cast<AEnemyAIController>(GetController());
+
+	HPBarWidgetObject = Cast<UTestHPBarWidget>(HPBarWidget->GetUserWidgetObject());
+	if (HPBarWidgetObject != nullptr)
+	{
+		HPBarWidgetObject->BindCharacter(HealthComponent);
+	}
 }
 
 void ATBaseEnemyCharacter::PlayHitMontage()
@@ -35,6 +46,10 @@ void ATBaseEnemyCharacter::PlayHitMontage()
 
 void ATBaseEnemyCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, float Health, float HealthDelta, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
+	if (HPBarWidgetObject != nullptr)
+	{
+		HPBarWidgetObject->UpdateHPWidget();
+	}
 	if (Health > 0.0f)
 	{
 		PlayHitMontage();
@@ -52,7 +67,7 @@ void ATBaseEnemyCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, 
 		AnimInst->SetDeadAnim();
 
 		EnemyAIController->StopAI();
-
+		
 		DetachFromControllerPendingDestroy();
 		
 		SetLifeSpan(10.0f);

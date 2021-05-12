@@ -35,9 +35,6 @@ void ATestSwordBoss::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// 테스트 코드
-	if(bEntrance)
-		MoveForward(1.0f);
 }
 
 void ATestSwordBoss::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -52,7 +49,7 @@ void ATestSwordBoss::NormalAttack()
 
 void ATestSwordBoss::SetEntranceStart()
 {
-	GetCharacterMovement()->MaxWalkSpeed = 100.0f;
+	GetCharacterMovement()->MaxWalkSpeed = 300.0f;
 	bEntrance = true;
 }
 
@@ -66,6 +63,7 @@ void ATestSwordBoss::SetEntranceEnd()
 		auto BlackboardComp = EnemyAIController->GetBlackboardComponent();
 		if (BlackboardComp == nullptr)
 			return;
+		BlackboardComp->SetValueAsVector(TEXT("NextPos"), GetActorLocation());
 		BlackboardComp->SetValueAsBool(TEXT("bEntrance"), false);
 	}
 }

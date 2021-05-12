@@ -44,10 +44,10 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	auto TestHPBarWidget = Cast<UTestHPBarWidget>(HPBarWidget->GetUserWidgetObject());
-	if (TestHPBarWidget != nullptr)
+	HPBarWidgetObject = Cast<UTestHPBarWidget>(HPBarWidget->GetUserWidgetObject());
+	if (HPBarWidgetObject != nullptr)
 	{
-		TestHPBarWidget->BindCharacter(HealthComponent);
+		HPBarWidgetObject->BindCharacter(HealthComponent);
 	}
 }
 
@@ -63,10 +63,9 @@ void APlayerCharacter::MoveRight(float Value)
 
 void APlayerCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, float Health, float HealthDelta, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-	auto TestHPBarWidget = Cast<UTestHPBarWidget>(HPBarWidget->GetUserWidgetObject());
-	if (TestHPBarWidget != nullptr)
+	if (HPBarWidgetObject != nullptr)
 	{
-		TestHPBarWidget->UpdateHPWidget();
+		HPBarWidgetObject->UpdateHPWidget();
 	}
 	if (Health <= 0.0f && !bDied)
 	{
@@ -122,4 +121,9 @@ void APlayerCharacter::SetQSkillEnd()
 void APlayerCharacter::SetESkillEnd()
 {
 	bESkill = false;
+}
+
+float APlayerCharacter::GetHealth() const
+{
+	return HealthComponent->GetHealth();
 }

@@ -8,6 +8,7 @@
 #include "Perception/AISense_Sight.h"
 #include "AIController.h"
 #include "THealthComponent.h"
+#include "PlayerCharacter.h"
 
 UBTService_FindTargetActor::UBTService_FindTargetActor()
 {
@@ -32,14 +33,14 @@ void UBTService_FindTargetActor::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 	TArray<AActor*> ActorArray;
 	AIPerceptionComp->GetKnownPerceivedActors(nullptr, ActorArray);
 
-	UE_LOG(LogTemp, Log, TEXT("Perceived Actors : %d"), ActorArray.Num());
+	//UE_LOG(LogTemp, Log, TEXT("Perceived Actors : %d"), ActorArray.Num());
 	OwnerComp.GetBlackboardComponent()->SetValueAsObject(TEXT("TargetActor"), nullptr);
 	OwnerComp.GetBlackboardComponent()->SetValueAsVector(TEXT("NextPos"), ControllingPawn->GetActorLocation());
 
 	if (ActorArray.Num() == 0)
 		return;
 
-	float Length = 1000.0f;
+	float Length = 100000.0f;
 
 	AActor* FinalTarget = nullptr;
 
@@ -51,10 +52,10 @@ void UBTService_FindTargetActor::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 			//OwnerComp.GetBlackboardComponent()->SetValueAsObject(TEXT("TargetActor"), TargetActor);
 			//break;
 
-			/*auto HealthComp = TargetActor->FindComponentByClass<UTHealthComponent>();
-			if (HealthComp != nullptr || HealthComp->GetHealth() <= 0.0f)
-				continue;*/
-
+			auto PlayerCharacter = Cast<APlayerCharacter>(TargetActor);
+			if (PlayerCharacter == nullptr || PlayerCharacter->GetHealth() <= 0.0f)
+				continue;
+			
 			if (Length > (ControllingPawn->GetActorLocation() - TargetActor->GetActorLocation()).Size())
 			{
 				Length = (ControllingPawn->GetActorLocation() - TargetActor->GetActorLocation()).Size();

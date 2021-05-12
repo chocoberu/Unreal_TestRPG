@@ -45,6 +45,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "UI")
 	class UWidgetComponent* HPBarWidget;
 
+	UPROPERTY(VisibleAnywhere, Category = "UI")
+	class UTestHPBarWidget* HPBarWidgetObject;
+
 	UPROPERTY(BlueprintReadOnly, Category = "Player")
 	bool bDied;
 
@@ -88,5 +91,7 @@ public:
 	void SetShiftSkillEnd();
 	void SetQSkillEnd();
 	void SetESkillEnd();
+
+	float GetHealth() const;
 	
 };
