@@ -18,7 +18,7 @@ void ASwordEnemyCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	EnemyAnimInstance = Cast<UTEnemyAnimInstance>(GetMesh()->GetAnimInstance());
-	EnemyAnimInstance->OnNormalAttackHitCheckDelegate.AddUObject(this, &ASwordEnemyCharacter::NormalAttackCheck);
+	EnemyAnimInstance->OnNormalAttackHitCheckDelegate.AddUFunction(this, FName("NormalAttackCheck"));
 
 	// Spawn a default weapon
 	FActorSpawnParameters SpawnParams;
@@ -51,6 +51,12 @@ void ASwordEnemyCharacter::Tick(float DeltaTime)
 void ASwordEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+void ASwordEnemyCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
 }
 
 void ASwordEnemyCharacter::NormalAttack()

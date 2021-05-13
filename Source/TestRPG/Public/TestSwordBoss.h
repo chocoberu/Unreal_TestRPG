@@ -6,6 +6,7 @@
 #include "TBaseEnemyCharacter.h"
 #include "TestSwordBoss.generated.h"
 
+class ATBaseEnemyCharacter;
 /**
  * 
  */
@@ -41,6 +42,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character")
 	float DefaultMaxSpeed;
 
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	TSubclassOf<ATBaseEnemyCharacter> MinionClass;
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -60,5 +64,7 @@ public:
 
 	UFUNCTION()
 	void NormalAttackCheck();
+
+	void SpawnMinion();
 };
 

@@ -7,6 +7,7 @@
 #include "EnemyAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
+#include "NavigationSystem.h"
 
 ATestSwordBoss::ATestSwordBoss()
 {
@@ -93,7 +94,25 @@ bool ATestSwordBoss::SweepAttackCheck(FHitResult& HitResult, FVector& AttackEnd,
 
 	// Debug 관련
 	FColor DebugColor = bResult ? FColor::Green : FColor::Red;
-	DrawDebugLine(GetWorld(), AttackStart, AttackEnd, DebugColor, false, 1.0f);
+	//DrawDebugLine(GetWorld(), AttackStart, AttackEnd, DebugColor, false, 1.0f);
+
+		// 공격 판정 범위를 DrawDebugCapsule로 표시
+#if ENABLE_DRAW_DEBUG
+	FVector TraceVec = GetActorForwardVector() * SkillRange;
+	FVector Center = GetActorLocation() + TraceVec * 0.5f;
+	float HalfHeight = SkillRadius * 0.5f;
+	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+	float DebugLifeTime = 1.0f;
+
+	DrawDebugCapsule(GetWorld(),
+		Center,
+		HalfHeight,
+		SkillRadius,
+		CapsuleRot,
+		DebugColor,
+		false,
+		DebugLifeTime);
+#endif
 
 	return bResult;
 }
@@ -131,4 +150,21 @@ void ATestSwordBoss::NormalAttackCheck()
 		// No Hit 파티클 생성
 		//UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), NormalAttackNoHitParticle, AttackEnd, FRotator::ZeroRotator);
 	}
+}
+
+void ATestSwordBoss::SpawnMinion()
+{
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	FNavLocation NextLocation;
+
+	UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetNavigationSystem(GetWorld());
+
+	if (NavSystem->GetRandomPointInNavigableRadius(GetActorLocation(), 600.0f, NextLocation))
+	{
+		ATBaseEnemyCharacter* Minion = GetWorld()->SpawnActor<ATBaseEnemyCharacter>(MinionClass, NextLocation.Location, FRotator::ZeroRotator, SpawnParams);
+		Minion->SetOwner(this);
+	}
+	// TODO : 쿨타임, 애니메이션 묘션 등 추가
 }
