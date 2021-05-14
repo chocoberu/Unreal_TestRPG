@@ -9,13 +9,11 @@
 
 UBTTaskNode_SpawnMinion::UBTTaskNode_SpawnMinion()
 {
-	NodeName = TEXT("AI Normal Attack");
+	NodeName = TEXT("Spawn Minion");
 	bNotifyTick = false;
 }
 EBTNodeResult::Type UBTTaskNode_SpawnMinion::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	UE_LOG(LogTemp, Log, TEXT("TODO : Boss Spawn Minion"));
-
 	ATestSwordBoss* ControllingPawn = Cast<ATestSwordBoss>(OwnerComp.GetAIOwner()->GetPawn());
 	if (ControllingPawn == nullptr)
 		return EBTNodeResult::Failed;

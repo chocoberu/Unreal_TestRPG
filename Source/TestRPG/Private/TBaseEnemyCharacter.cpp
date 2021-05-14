@@ -21,6 +21,8 @@ ATBaseEnemyCharacter::ATBaseEnemyCharacter()
 
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("TestRPGCharacter"));
 
+	CharacterAffiliation = ECharacterAffiliation::E_Enemy;
+
 	HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBarWidget"));
 	HPBarWidget->SetupAttachment(GetMesh());
 	

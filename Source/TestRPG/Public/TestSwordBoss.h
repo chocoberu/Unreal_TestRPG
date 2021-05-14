@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "TestRPG.h"
 #include "TBaseEnemyCharacter.h"
 #include "TestSwordBoss.generated.h"
 
@@ -44,6 +44,15 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	TSubclassOf<ATBaseEnemyCharacter> MinionClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
+	float SpawnCoolTime;
+
+	FTimerHandle SpawnTimer;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Attack")
+	bool bSpawnMinion;
+
 
 public:
 	// Called every frame

@@ -33,6 +33,8 @@ APlayerCharacter::APlayerCharacter()
 	HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBarWidget"));
 	HPBarWidget->SetupAttachment(GetMesh());
 
+	CharacterAffiliation = ECharacterAffiliation::E_Player;
+
 	bDied = false;
 	bNormalAttack = false;
 	NormalAttackCoolTime = 1.0f;
@@ -71,6 +73,8 @@ void APlayerCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, floa
 	{
 		bDied = true;
 
+		SetWeaponInvisible();
+		
 		GetMovementComponent()->StopMovementImmediately();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
@@ -126,4 +130,9 @@ void APlayerCharacter::SetESkillEnd()
 float APlayerCharacter::GetHealth() const
 {
 	return HealthComponent->GetHealth();
+}
+
+void APlayerCharacter::SetWeaponInvisible()
+{
+
 }

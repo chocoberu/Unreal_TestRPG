@@ -163,6 +163,11 @@ void ATwinGunnerCharacter::SetQSkillEnd()
 	GetWorldTimerManager().SetTimer(QSkillTimer, this, &APlayerCharacter::SetQSkillEnd, QSkillCoolTime, false);
 }
 
+void ATwinGunnerCharacter::SetWeaponInvisible()
+{
+	GetMesh()->SetMaterialByName(WeaponMatSlotName, WeaponMatInvisible);
+}
+
 bool ATwinGunnerCharacter::SweepAttackCheck(FHitResult& HitResult, FVector& AttackEnd, float SkillRange, float SkillRadius)
 {
 	FCollisionQueryParams Params(NAME_None, false, this);

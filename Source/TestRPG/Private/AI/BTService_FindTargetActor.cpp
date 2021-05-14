@@ -53,7 +53,8 @@ void UBTService_FindTargetActor::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 			//break;
 
 			auto PlayerCharacter = Cast<APlayerCharacter>(TargetActor);
-			if (PlayerCharacter == nullptr || PlayerCharacter->GetHealth() <= 0.0f)
+			if (PlayerCharacter == nullptr || PlayerCharacter->GetHealth() <= 0.0f ||
+				PlayerCharacter->GetCharacterAffilation() != ECharacterAffiliation::E_Player)
 				continue;
 			
 			if (Length > (ControllingPawn->GetActorLocation() - TargetActor->GetActorLocation()).Size())

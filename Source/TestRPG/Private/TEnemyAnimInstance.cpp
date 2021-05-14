@@ -27,6 +27,12 @@ void UTEnemyAnimInstance::PlayNormalAttackMontage()
 		Montage_Play(NormalAttackArray[0], 1.0f);
 }
 
+void UTEnemyAnimInstance::PlaySpawnMontage()
+{
+	if (SpawnMontage != nullptr)
+		Montage_Play(SpawnMontage, 1.0f);
+}
+
 void UTEnemyAnimInstance::AnimNotify_NormalAttackCheck()
 {
 	OnNormalAttackHitCheckDelegate.Broadcast();

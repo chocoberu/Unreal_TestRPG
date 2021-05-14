@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "TestRPG.h"
 #include "BehaviorTree/BTService.h"
 #include "BTService_FindTargetActor.generated.h"
 

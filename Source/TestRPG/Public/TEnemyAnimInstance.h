@@ -27,6 +27,8 @@ public:
 
 	void PlayHitMontage();
 
+	void PlaySpawnMontage();
+
 	void PlayNormalAttackMontage();
 
 	// µ®∏Æ∞‘¿Ã∆Æ
@@ -44,6 +46,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	UAnimMontage* HitMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	UAnimMontage* SpawnMontage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", Meta = (AllowPrivateAccess = true))
 	float CurrentSpeed;

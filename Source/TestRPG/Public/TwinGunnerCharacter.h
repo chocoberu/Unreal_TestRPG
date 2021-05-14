@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "TestRPG.h"
 #include "PlayerCharacter.h"
 #include "TwinGunnerCharacter.generated.h"
 
@@ -111,4 +111,6 @@ public:
 
 	UFUNCTION()
 	void SetQSkillEnd();
+
+	virtual void SetWeaponInvisible() override;
 };

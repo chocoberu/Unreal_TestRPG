@@ -154,6 +154,9 @@ void ATestSwordBoss::NormalAttackCheck()
 
 void ATestSwordBoss::SpawnMinion()
 {
+	if (bSpawnMinion)
+		return;
+	EnemyAnimInstance->PlaySpawnMontage();
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
@@ -163,8 +166,13 @@ void ATestSwordBoss::SpawnMinion()
 
 	if (NavSystem->GetRandomPointInNavigableRadius(GetActorLocation(), 600.0f, NextLocation))
 	{
-		ATBaseEnemyCharacter* Minion = GetWorld()->SpawnActor<ATBaseEnemyCharacter>(MinionClass, NextLocation.Location, FRotator::ZeroRotator, SpawnParams);
+		FVector Location = NextLocation.Location;
+		Location.Z = GetActorLocation().Z + 50.0f;
+		ATBaseEnemyCharacter* Minion = GetWorld()->SpawnActor<ATBaseEnemyCharacter>(MinionClass, Location, FRotator::ZeroRotator, SpawnParams);
 		Minion->SetOwner(this);
 	}
-	// TODO : 쿨타임, 애니메이션 묘션 등 추가
+
+	bSpawnMinion = true;
+	GetWorldTimerManager().SetTimer(SpawnTimer, FTimerDelegate::CreateLambda([&]() {bSpawnMinion = false; }), SpawnCoolTime, false);
+
 }

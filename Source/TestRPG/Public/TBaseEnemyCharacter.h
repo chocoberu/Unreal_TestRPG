@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "TestRPG.h"
 #include "GameFramework/Character.h"
 #include "TBaseEnemyCharacter.generated.h"
 
@@ -46,6 +46,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "UI")
 	class UTestHPBarWidget* HPBarWidgetObject;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player")
+	ECharacterAffiliation CharacterAffiliation;
+
 	UPROPERTY(BlueprintReadOnly, Category = "Player")
 	bool bDied;
 
@@ -57,4 +60,6 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void NormalAttack();
+
+	ECharacterAffiliation GetCharacterAffilation() { return CharacterAffiliation; }
 };

@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "TestRPG.h"
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
@@ -42,11 +42,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UTHealthComponent* HealthComponent;
 
+	// UI
 	UPROPERTY(VisibleAnywhere, Category = "UI")
 	class UWidgetComponent* HPBarWidget;
 
 	UPROPERTY(VisibleAnywhere, Category = "UI")
 	class UTestHPBarWidget* HPBarWidgetObject;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player")
+	ECharacterAffiliation CharacterAffiliation;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Player")
 	bool bDied;
@@ -75,6 +79,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
 	float ESkillCoolTime;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+		FName WeaponMatSlotName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+		UMaterial* WeaponMatInvisible;
+
 	FTimerHandle NormalAttackTimer;
 	FTimerHandle ShiftTimer;
 	FTimerHandle QSkillTimer;
@@ -93,5 +103,9 @@ public:
 	void SetESkillEnd();
 
 	float GetHealth() const;
+
+	virtual void SetWeaponInvisible();
+
+	ECharacterAffiliation GetCharacterAffilation() { return CharacterAffiliation; }
 	
 };
