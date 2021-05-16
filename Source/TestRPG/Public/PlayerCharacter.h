@@ -80,10 +80,10 @@ protected:
 	float ESkillCoolTime;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-		FName WeaponMatSlotName;
+	FName WeaponMatSlotName;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-		UMaterial* WeaponMatInvisible;
+	UMaterial* WeaponMatInvisible;
 
 	FTimerHandle NormalAttackTimer;
 	FTimerHandle ShiftTimer;

@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "TwinGunnerUltimateGun.h"
+#include "Particles/ParticleSystemComponent.h"
 
 ATwinGunnerCharacter::ATwinGunnerCharacter()
 {
@@ -225,6 +226,10 @@ void ATwinGunnerCharacter::NormalAttackCheck()
 		// No Hit 파티클 생성
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), NormalAttackNoHitParticle, AttackEnd, FRotator::ZeroRotator);
 	}
+	
+	/*FVector MuzzleLocation = GetMesh()->GetSocketLocation(TEXT("Muzzle_01"));
+	UParticleSystemComponent* TracerComp = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), NormalAttackTracerEffect, MuzzleLocation);
+	TracerComp->SetVectorParameter()*/
 }
 void ATwinGunnerCharacter::QSkillCheck()
 {

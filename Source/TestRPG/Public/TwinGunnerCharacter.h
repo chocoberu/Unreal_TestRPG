@@ -54,6 +54,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Player")
 	TSubclassOf<ATwinGunnerUltimateGun> UltimateGunClass;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Attack")
+	class UParticleSystem* NormalAttackTracerEffect;
+
 	UPROPERTY(BlueprintReadOnly)
 	ETwinGunnerSkillState TwinGunnerSkillState;
 
