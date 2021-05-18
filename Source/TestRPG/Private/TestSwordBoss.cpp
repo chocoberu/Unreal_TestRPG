@@ -94,7 +94,7 @@ bool ATestSwordBoss::SweepAttackCheck(FHitResult& HitResult, FVector& AttackEnd,
 
 	// Debug 관련
 	FColor DebugColor = bResult ? FColor::Green : FColor::Red;
-	//DrawDebugLine(GetWorld(), AttackStart, AttackEnd, DebugColor, false, 1.0f);
+	DrawDebugLine(GetWorld(), AttackStart, AttackEnd, DebugColor, false, 1.0f);
 
 		// 공격 판정 범위를 DrawDebugCapsule로 표시
 #if ENABLE_DRAW_DEBUG
@@ -108,7 +108,7 @@ bool ATestSwordBoss::SweepAttackCheck(FHitResult& HitResult, FVector& AttackEnd,
 		Center,
 		HalfHeight,
 		SkillRadius,
-		CapsuleRot,
+		AttackRot.Quaternion(),
 		DebugColor,
 		false,
 		DebugLifeTime);
