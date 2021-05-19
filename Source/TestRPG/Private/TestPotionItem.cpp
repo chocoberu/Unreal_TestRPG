@@ -12,7 +12,12 @@ void ATestPotionItem::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ATestPotionItem::UseItem()
+void ATestPotionItem::UseItem(AActor* OverlapActor)
 {
+	if (OverlapActor == nullptr)
+		return;
 
+	UE_LOG(LogTemp, Log, TEXT("Potion : HP heal"));
+
+	// TODO : HP 회복 구현
 }

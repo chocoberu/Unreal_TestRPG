@@ -23,5 +23,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	virtual void UseItem() override;
+	virtual void UseItem(AActor* OverlapActor) override;
+
+
 };

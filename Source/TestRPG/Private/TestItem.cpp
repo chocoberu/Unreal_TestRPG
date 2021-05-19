@@ -23,9 +23,18 @@ void ATestItem::BeginPlay()
 	
 }
 
-void ATestItem::UseItem()
+void ATestItem::UseItem(AActor* OverlapActor)
 {
 
+}
+
+void ATestItem::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	if (OtherActor == nullptr)
+		return;
+	UE_LOG(LogTemp, Log, TEXT("Item : Overlap %s"), *OtherActor->GetName());
+	
+	UseItem(OtherActor);
 }
 
 

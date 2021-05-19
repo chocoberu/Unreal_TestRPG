@@ -29,6 +29,8 @@ protected:
 
 public:	
 
-	virtual void UseItem();
+	virtual void UseItem(AActor* OverlapActor);
+
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	
 };
