@@ -104,7 +104,7 @@ public:
 
 	float GetHealth() const;
 
-	virtual void SetWeaponInvisible();
+	virtual void SetWeaponVisible(bool NewFlag);
 
 	ECharacterAffiliation GetCharacterAffilation() { return CharacterAffiliation; }
 	

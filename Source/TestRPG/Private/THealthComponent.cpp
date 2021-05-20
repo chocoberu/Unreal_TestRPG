@@ -66,3 +66,9 @@ float UTHealthComponent::GetHPRatio() const
 {
 	return Health < KINDA_SMALL_NUMBER ? 0.0f : (Health / DefaultHealth);
 }
+
+void UTHealthComponent::SetHealth(float NewHealth)
+{
+	Health = FMath::Clamp(NewHealth, 0.0f, DefaultHealth);
+	OnHealthChanged.Broadcast(this, Health, 0.0f, nullptr, nullptr, nullptr);
+}

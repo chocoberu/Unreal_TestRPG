@@ -40,5 +40,7 @@ public:
 	float GetHealth() const;
 	float GetHPRatio() const;
 
+	void SetHealth(float NewHealth);
+
 	FOnHealthChangedDelegate OnHealthChanged;
 };

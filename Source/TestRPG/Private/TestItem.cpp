@@ -4,6 +4,7 @@
 #include "TestItem.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "PlayerCharacter.h"
 
 // Sets default values
 ATestItem::ATestItem()
@@ -33,8 +34,11 @@ void ATestItem::NotifyActorBeginOverlap(AActor* OtherActor)
 	if (OtherActor == nullptr)
 		return;
 	UE_LOG(LogTemp, Log, TEXT("Item : Overlap %s"), *OtherActor->GetName());
+
+	auto Player = Cast<APlayerCharacter>(OtherActor);
 	
-	UseItem(OtherActor);
+	if(Player != nullptr)
+		UseItem(OtherActor);
 }
 
 

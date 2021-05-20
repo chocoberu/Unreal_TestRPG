@@ -73,7 +73,7 @@ void APlayerCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, floa
 	{
 		bDied = true;
 
-		SetWeaponInvisible();
+		SetWeaponVisible(false);
 		
 		GetMovementComponent()->StopMovementImmediately();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -132,7 +132,7 @@ float APlayerCharacter::GetHealth() const
 	return HealthComponent->GetHealth();
 }
 
-void APlayerCharacter::SetWeaponInvisible()
+void APlayerCharacter::SetWeaponVisible(bool NewFlag)
 {
 
 }

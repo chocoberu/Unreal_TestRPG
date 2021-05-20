@@ -6,6 +6,7 @@
 #include "TestItem.h"
 #include "TestPotionItem.generated.h"
 
+class UTHealthComponent;
 /**
  * 
  */
@@ -21,6 +22,12 @@ protected:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Component")
+	TSubclassOf<UTHealthComponent> HealthComponentClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Potion")
+	float HealAmount;
 
 public:
 	virtual void UseItem(AActor* OverlapActor) override;

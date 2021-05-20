@@ -115,5 +115,5 @@ public:
 	UFUNCTION()
 	void SetQSkillEnd();
 
-	virtual void SetWeaponInvisible() override;
+	virtual void SetWeaponVisible(bool NewFlag) override;
 };

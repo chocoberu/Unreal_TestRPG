@@ -164,9 +164,10 @@ void ATwinGunnerCharacter::SetQSkillEnd()
 	GetWorldTimerManager().SetTimer(QSkillTimer, this, &APlayerCharacter::SetQSkillEnd, QSkillCoolTime, false);
 }
 
-void ATwinGunnerCharacter::SetWeaponInvisible()
+void ATwinGunnerCharacter::SetWeaponVisible(bool NewFlag)
 {
-	GetMesh()->SetMaterialByName(WeaponMatSlotName, WeaponMatInvisible);
+	if(!NewFlag)
+		GetMesh()->SetMaterialByName(WeaponMatSlotName, WeaponMatInvisible);
 }
 
 bool ATwinGunnerCharacter::SweepAttackCheck(FHitResult& HitResult, FVector& AttackEnd, float SkillRange, float SkillRadius)
