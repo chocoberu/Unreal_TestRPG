@@ -163,6 +163,8 @@ void ATestSwordBoss::SpawnMinion()
 	FNavLocation NextLocation;
 
 	UNavigationSystemV1* NavSystem = UNavigationSystemV1::GetNavigationSystem(GetWorld());
+	if (NavSystem == nullptr)
+		return;
 
 	if (NavSystem->GetRandomPointInNavigableRadius(GetActorLocation(), 600.0f, NextLocation))
 	{
