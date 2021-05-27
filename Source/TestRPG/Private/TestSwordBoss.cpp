@@ -119,6 +119,8 @@ bool ATestSwordBoss::SweepAttackCheck(FHitResult& HitResult, FVector& AttackEnd,
 
 void ATestSwordBoss::NormalAttackCheck()
 {
+	if (bDied)
+		return;
 	UE_LOG(LogTemp, Log, TEXT("SwordBoss : NormalAttackCheck"));
 	FHitResult HitResult;
 	FVector AttackEnd;

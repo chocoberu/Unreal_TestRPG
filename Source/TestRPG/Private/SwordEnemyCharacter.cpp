@@ -69,6 +69,9 @@ void ASwordEnemyCharacter::NormalAttack()
 
 void ASwordEnemyCharacter::NormalAttackCheck()
 {
+	if (bDied)
+		return;
+
 	FHitResult HitResult;
 
 	FCollisionQueryParams Params(NAME_None, false, this);

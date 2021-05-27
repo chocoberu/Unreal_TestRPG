@@ -6,6 +6,8 @@
 #include "TestItem.h"
 #include "TestPotionItem.generated.h"
 
+using FOnUsedPotionDelegate = TMulticastDelegate<void()>;
+
 class UTHealthComponent;
 /**
  * 
@@ -32,5 +34,5 @@ protected:
 public:
 	virtual void UseItem(AActor* OverlapActor) override;
 
-
+	FOnUsedPotionDelegate OnUsedPotionDelegate;
 };

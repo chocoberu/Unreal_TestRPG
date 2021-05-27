@@ -47,6 +47,20 @@ void ATestPotionGenerator::SpawnPotion()
 	{
 		ATestPotionItem* Potion = GetWorld()->SpawnActor<ATestPotionItem>(PotionClass, NextLocation.Location, FRotator::ZeroRotator, SpawnParams);
 		Potion->SetOwner(this);
+		Potion->OnUsedPotionDelegate.AddUFunction(this, FName("SubtractPotionCount"));
+		CurrentPotionCount++;
+	}
+}
+
+void ATestPotionGenerator::SubtractPotionCount()
+{
+	CurrentPotionCount--;
+	if (CurrentPotionCount < MaxCount)
+	{
+		if (!GetWorldTimerManager().IsTimerActive(SpawnTimer))
+		{
+			GetWorldTimerManager().SetTimer(SpawnTimer, this, &ATestPotionGenerator::SpawnPotion, SpawnTime, true);
+		}
 	}
 }
 
@@ -55,5 +69,9 @@ void ATestPotionGenerator::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (CurrentPotionCount >= MaxCount && GetWorldTimerManager().IsTimerActive(SpawnTimer))
+	{
+		GetWorldTimerManager().ClearTimer(SpawnTimer);
+	}
 }
 

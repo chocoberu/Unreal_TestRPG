@@ -24,6 +24,9 @@ protected:
 
 	void SpawnPotion();
 
+	UFUNCTION()
+	void SubtractPotionCount();
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Potion")
 	TSubclassOf<ATestPotionItem> PotionClass;
 

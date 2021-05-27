@@ -30,5 +30,6 @@ void ATestPotionItem::UseItem(AActor* OverlapActor)
 		return;
 
 	HealthComp->SetHealth(HealthComp->GetHealth() + HealAmount);
+	OnUsedPotionDelegate.Broadcast();
 	Destroy();
 }
