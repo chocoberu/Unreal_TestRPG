@@ -72,7 +72,7 @@ void ATwinGunnerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 void ATwinGunnerCharacter::NormalAttack()
 {
-	if (bNormalAttack || TwinGunnerSkillState != ETwinGunnerSkillState::E_Idle)
+	if (bNormalAttack || TwinGunnerSkillState != ETwinGunnerSkillState::E_Idle || bDied)
 		return;
 	if (AnimInstance != nullptr)
 	{
@@ -87,7 +87,7 @@ void ATwinGunnerCharacter::NormalAttack()
 
 void ATwinGunnerCharacter::Shift()
 {
-	if (bShift || TwinGunnerSkillState != ETwinGunnerSkillState::E_Idle)
+	if (bShift || TwinGunnerSkillState != ETwinGunnerSkillState::E_Idle || bDied)
 		return;
 	if (AnimInstance != nullptr)
 	{
@@ -113,7 +113,7 @@ void ATwinGunnerCharacter::SpawnUltimateGun()
 
 void ATwinGunnerCharacter::ESkill()
 {
-	if (bESkill || TwinGunnerSkillState != ETwinGunnerSkillState::E_Idle)
+	if (bESkill || TwinGunnerSkillState != ETwinGunnerSkillState::E_Idle || bDied)
 		return;
 	if (AnimInstance != nullptr)
 	{
@@ -133,7 +133,7 @@ void ATwinGunnerCharacter::SetESkillEnd()
 
 void ATwinGunnerCharacter::QSkill()
 {
-	if (bQSkill || TwinGunnerSkillState != ETwinGunnerSkillState::E_Idle)
+	if (bQSkill || TwinGunnerSkillState != ETwinGunnerSkillState::E_Idle || bDied)
 		return;
 
 	if (AnimInstance != nullptr)
@@ -197,6 +197,9 @@ bool ATwinGunnerCharacter::SweepAttackCheck(FHitResult& HitResult, FVector& Atta
 
 void ATwinGunnerCharacter::NormalAttackCheck()
 {
+	if (bDied)
+		return;
+
 	FHitResult HitResult;
 	FVector AttackEnd;
 
@@ -234,6 +237,9 @@ void ATwinGunnerCharacter::NormalAttackCheck()
 }
 void ATwinGunnerCharacter::QSkillCheck()
 {
+	if (bDied)
+		return;
+
 	FHitResult HitResult;
 	FVector AttackEnd;
 

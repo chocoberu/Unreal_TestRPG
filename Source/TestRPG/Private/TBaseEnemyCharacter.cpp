@@ -71,6 +71,8 @@ void ATBaseEnemyCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, 
 		EnemyAIController->StopAI();
 		
 		DetachFromControllerPendingDestroy();
+
+		HPBarWidget->SetHiddenInGame(true);
 		
 		SetLifeSpan(10.0f);
 	}
