@@ -89,6 +89,28 @@ void ATwinGunnerCharacter::Shift()
 {
 	if (bShift || TwinGunnerSkillState != ETwinGunnerSkillState::E_Idle || bDied)
 		return;
+
+	// 테스트 코드
+	// TOOD : 이동 방향 별로 Shift 처리
+	switch (PrevMoveState)
+	{
+	case EPrevMoveState::E_W:
+		UE_LOG(LogTemp, Log, TEXT("W Shift"));
+		break;
+	case EPrevMoveState::E_S:
+		UE_LOG(LogTemp, Log, TEXT("S Shift"));
+		break;
+	case EPrevMoveState::E_A:
+		UE_LOG(LogTemp, Log, TEXT("A Shift"));
+		break;
+	case EPrevMoveState::E_D:
+		UE_LOG(LogTemp, Log, TEXT("D Shift"));
+		break;
+	case EPrevMoveState::E_None:
+		UE_LOG(LogTemp, Log, TEXT("None Shift"));
+		break;
+	}
+	
 	if (AnimInstance != nullptr)
 	{
 		AnimInstance->PlayShift();

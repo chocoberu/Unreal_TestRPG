@@ -6,6 +6,16 @@
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
+UENUM(BlueprintType)
+enum class EPrevMoveState : uint8
+{
+	E_W = 0 UMETA(DisplayName = "W"),
+	E_S UMETA(DisplayName = "S"),
+	E_A UMETA(DisplayName = "A"),
+	E_D UMETA(DisplayName = "D"),
+	E_None UMETA(DisplayName = "None"),
+};
+
 class UTPlayerAnimInstance;
 
 UCLASS()
@@ -89,6 +99,9 @@ protected:
 	FTimerHandle ShiftTimer;
 	FTimerHandle QSkillTimer;
 	FTimerHandle ESkillTimer;
+
+	UPROPERTY(BlueprintReadOnly)
+	EPrevMoveState PrevMoveState;
 
 public:	
 	// Called every frame

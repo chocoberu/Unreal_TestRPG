@@ -39,6 +39,8 @@ APlayerCharacter::APlayerCharacter()
 	bNormalAttack = false;
 	NormalAttackCoolTime = 1.0f;
 	ShiftSkillCoolTime = 1.0f;
+
+	PrevMoveState = EPrevMoveState::E_None;
 }
 
 // Called when the game starts or when spawned
@@ -56,11 +58,20 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::MoveForward(float Value)
 {
 	AddMovementInput(GetActorForwardVector() * Value);
+	if (Value > 0.0f)
+		PrevMoveState = EPrevMoveState::E_W;
+	else if (Value < 0.0f)
+		PrevMoveState = EPrevMoveState::E_S;
+	
 }
 
 void APlayerCharacter::MoveRight(float Value)
 {
 	AddMovementInput(GetActorRightVector() * Value);
+	if (Value > 0.0f)
+		PrevMoveState = EPrevMoveState::E_D;
+	else if (Value < 0.0f)
+		PrevMoveState = EPrevMoveState::E_A;
 }
 
 void APlayerCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, float Health, float HealthDelta, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
