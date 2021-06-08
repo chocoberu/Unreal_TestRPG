@@ -19,9 +19,9 @@ void UTwinGunnerAnimInstance::PlayNormalAttack()
 
 }
 
-void UTwinGunnerAnimInstance::PlayShift()
+void UTwinGunnerAnimInstance::PlayShift(int32 ShiftIndex)
 {
-	Super::PlayShift();
+	Super::PlayShift(ShiftIndex);
 
 }
 

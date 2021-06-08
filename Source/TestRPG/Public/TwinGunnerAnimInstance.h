@@ -20,7 +20,7 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 	virtual void PlayNormalAttack();
-	virtual void PlayShift();
+	virtual void PlayShift(int32 ShiftIndex);
 	virtual void PlayESkill();
 	virtual void PlayQSkill();
 	virtual void SetChargeEnd();

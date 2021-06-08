@@ -29,12 +29,23 @@ void UTPlayerAnimInstance::PlayNormalAttack()
 	}
 }
 
-void UTPlayerAnimInstance::PlayShift()
+void UTPlayerAnimInstance::PlayShift(int32 ShiftIndex)
 {
 	UE_LOG(LogTemp, Log, TEXT("Shift"));
 
-	if (ShiftMontage != nullptr)
-		Montage_Play(ShiftMontage, 1.0f);
+	switch (ShiftIndex)
+	{
+	case 0:
+		if (ShiftMontage != nullptr)
+			Montage_Play(ShiftMontage, 1.0f);
+		break;
+	case 1:
+		if(ShiftBackMontage != nullptr)
+			Montage_Play(ShiftBackMontage, 1.0f);
+		break;
+	}
+
+	
 }
 
 void UTPlayerAnimInstance::PlayESkill()

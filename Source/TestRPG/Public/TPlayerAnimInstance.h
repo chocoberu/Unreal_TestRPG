@@ -43,7 +43,7 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 	virtual void PlayNormalAttack();
-	virtual void PlayShift();
+	virtual void PlayShift(int32 ShiftIndex);
 	virtual void PlayESkill();
 	virtual void PlayQSkill();
 
@@ -63,6 +63,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	UAnimMontage* ShiftMontage;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	UAnimMontage* ShiftBackMontage;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	UAnimMontage* ESkillMontage;

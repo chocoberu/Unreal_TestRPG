@@ -90,15 +90,28 @@ void ATwinGunnerCharacter::Shift()
 	if (bShift || TwinGunnerSkillState != ETwinGunnerSkillState::E_Idle || bDied)
 		return;
 
+	if (AnimInstance == nullptr)
+		return;
 	// 테스트 코드
 	// TOOD : 이동 방향 별로 Shift 처리
+
+	float Velocity = 900.0f;
+
 	switch (PrevMoveState)
 	{
 	case EPrevMoveState::E_W:
 		UE_LOG(LogTemp, Log, TEXT("W Shift"));
+		AnimInstance->PlayShift(0);
+
+		GetCharacterMovement()->Velocity = GetActorForwardVector() * Velocity;
+		Jump();
 		break;
 	case EPrevMoveState::E_S:
 		UE_LOG(LogTemp, Log, TEXT("S Shift"));
+		AnimInstance->PlayShift(1);
+
+		GetCharacterMovement()->Velocity = -GetActorForwardVector() * Velocity;
+		Jump();
 		break;
 	case EPrevMoveState::E_A:
 		UE_LOG(LogTemp, Log, TEXT("A Shift"));
@@ -110,20 +123,23 @@ void ATwinGunnerCharacter::Shift()
 		UE_LOG(LogTemp, Log, TEXT("None Shift"));
 		break;
 	}
-	
-	if (AnimInstance != nullptr)
-	{
-		AnimInstance->PlayShift();
-		// 테스트 코드
-		float Velocity = 900.0f; // 순간 속도
-		GetCharacterMovement()->Velocity = GetActorForwardVector() * Velocity;
-		Jump();
 
-		bShift = true;
-		GetWorldTimerManager().SetTimer(ShiftTimer, this, &APlayerCharacter::SetShiftSkillEnd, ShiftSkillCoolTime, false);
-	}
-	else
-		UE_LOG(LogTemp, Error, TEXT("AnimInstance is nullptr"));
+	bShift = true;
+	GetWorldTimerManager().SetTimer(ShiftTimer, this, &APlayerCharacter::SetShiftSkillEnd, ShiftSkillCoolTime, false);
+	
+	//if (AnimInstance != nullptr)
+	//{
+	//	//AnimInstance->PlayShift();
+	//	// 테스트 코드
+	//	//float Velocity = 900.0f; // 순간 속도
+	//	//GetCharacterMovement()->Velocity = GetActorForwardVector() * Velocity;
+	//	//Jump();
+
+	//	bShift = true;
+	//	GetWorldTimerManager().SetTimer(ShiftTimer, this, &APlayerCharacter::SetShiftSkillEnd, ShiftSkillCoolTime, false);
+	//}
+	//else
+	//	UE_LOG(LogTemp, Error, TEXT("AnimInstance is nullptr"));
 
 }
 
