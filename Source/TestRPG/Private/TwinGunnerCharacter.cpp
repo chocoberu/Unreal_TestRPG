@@ -56,6 +56,8 @@ void ATwinGunnerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (GetVelocity().Size() <= 0.01f)
+		PrevMoveState = EPrevMoveState::E_None;
 }
 
 // Called to bind functionality to input
@@ -104,26 +106,39 @@ void ATwinGunnerCharacter::Shift()
 		AnimInstance->PlayShift(0);
 
 		GetCharacterMovement()->Velocity = GetActorForwardVector() * Velocity;
-		Jump();
+		//Jump();
 		break;
 	case EPrevMoveState::E_S:
 		UE_LOG(LogTemp, Log, TEXT("S Shift"));
 		AnimInstance->PlayShift(1);
 
 		GetCharacterMovement()->Velocity = -GetActorForwardVector() * Velocity;
-		Jump();
+		//Jump();
 		break;
 	case EPrevMoveState::E_A:
 		UE_LOG(LogTemp, Log, TEXT("A Shift"));
+
+		AnimInstance->PlayShift(2);
+
+		GetCharacterMovement()->Velocity = -GetActorRightVector() * Velocity;
+		//Jump();
 		break;
 	case EPrevMoveState::E_D:
 		UE_LOG(LogTemp, Log, TEXT("D Shift"));
+		AnimInstance->PlayShift(3);
+
+		GetCharacterMovement()->Velocity = GetActorRightVector() * Velocity;
+		//Jump();
 		break;
 	case EPrevMoveState::E_None:
 		UE_LOG(LogTemp, Log, TEXT("None Shift"));
+		AnimInstance->PlayShift(0);
+
+		GetCharacterMovement()->Velocity = GetActorForwardVector() * Velocity;
+		//Jump();
 		break;
 	}
-
+	Jump();
 	bShift = true;
 	GetWorldTimerManager().SetTimer(ShiftTimer, this, &APlayerCharacter::SetShiftSkillEnd, ShiftSkillCoolTime, false);
 	

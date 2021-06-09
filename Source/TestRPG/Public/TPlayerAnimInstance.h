@@ -68,6 +68,12 @@ protected:
 	UAnimMontage* ShiftBackMontage;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	UAnimMontage* ShiftLeftMontage;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	UAnimMontage* ShiftRightMontage;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	UAnimMontage* ESkillMontage;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))

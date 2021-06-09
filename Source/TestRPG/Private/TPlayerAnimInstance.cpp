@@ -43,6 +43,15 @@ void UTPlayerAnimInstance::PlayShift(int32 ShiftIndex)
 		if(ShiftBackMontage != nullptr)
 			Montage_Play(ShiftBackMontage, 1.0f);
 		break;
+	case 2:
+		if (ShiftLeftMontage != nullptr)
+			Montage_Play(ShiftLeftMontage, 1.0f);
+		break;
+	case 3:
+		if (ShiftRightMontage != nullptr)
+			Montage_Play(ShiftRightMontage, 1.0f);
+		break;
+
 	}
 
 	
