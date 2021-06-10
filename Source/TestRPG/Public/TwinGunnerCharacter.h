@@ -71,6 +71,8 @@ protected:
 
 	bool bQSkillReleased;
 
+	FTimerHandle QSkillPressedTimer;
+
 
 private:
 	
