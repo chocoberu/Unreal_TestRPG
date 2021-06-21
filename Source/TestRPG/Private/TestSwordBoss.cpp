@@ -29,6 +29,7 @@ void ATestSwordBoss::BeginPlay()
 		if (BlackboardComp == nullptr)
 			return;
 		BlackboardComp->SetValueAsBool(TEXT("bEntrance"), true);
+		BlackboardComp->SetValueAsEnum(TEXT("BossState"), (uint8)EEnemyState::E_Entrance);
 	}
 }
 
@@ -52,6 +53,7 @@ void ATestSwordBoss::SetEntranceStart()
 {
 	GetCharacterMovement()->MaxWalkSpeed = 300.0f;
 	bEntrance = true;
+
 }
 
 void ATestSwordBoss::SetEntranceEnd()
@@ -66,6 +68,7 @@ void ATestSwordBoss::SetEntranceEnd()
 			return;
 		BlackboardComp->SetValueAsVector(TEXT("NextPos"), GetActorLocation());
 		BlackboardComp->SetValueAsBool(TEXT("bEntrance"), false);
+		BlackboardComp->SetValueAsEnum(TEXT("BossState"), (uint8)EEnemyState::E_Idle);
 	}
 }
 

@@ -6,15 +6,6 @@
 #include "GameFramework/Character.h"
 #include "TBaseEnemyCharacter.generated.h"
 
-UENUM(BlueprintType)
-enum class EEnemyState : uint8
-{
-	E_Idle = 0 UMETA(DisplayName = "Idle"),
-	E_Patrol UMETA(DisplayName = "Patrol"),
-	E_Chasing UMETA(DIsplayName = "Chasing"),
-	E_Dead UMETA(DisplayName = "Dead"),
-};
-
 UCLASS()
 class TESTRPG_API ATBaseEnemyCharacter : public ACharacter
 {

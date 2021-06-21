@@ -48,10 +48,6 @@ void UBTService_FindTargetActor::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 	{
 		if (TargetActor != nullptr)
 		{
-			//UE_LOG(LogTemp, Log, TEXT("Target Actor is : %s"), *TargetActor->GetName());
-			//OwnerComp.GetBlackboardComponent()->SetValueAsObject(TEXT("TargetActor"), TargetActor);
-			//break;
-
 			auto PlayerCharacter = Cast<APlayerCharacter>(TargetActor);
 			if (PlayerCharacter == nullptr || PlayerCharacter->GetHealth() <= 0.0f ||
 				PlayerCharacter->GetCharacterAffilation() != ECharacterAffiliation::E_Player)
@@ -64,7 +60,14 @@ void UBTService_FindTargetActor::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 			}
 		}
 	}
+
 	OwnerComp.GetBlackboardComponent()->SetValueAsObject(TEXT("TargetActor"), FinalTarget);
-	if(FinalTarget != nullptr)
+	OwnerComp.GetBlackboardComponent()->SetValueAsEnum(TEXT("BossState"), (uint8)EEnemyState::E_Patrol);
+
+	if (FinalTarget != nullptr)
+	{
 		OwnerComp.GetBlackboardComponent()->SetValueAsVector(TEXT("NextPos"), FinalTarget->GetActorLocation());
+		OwnerComp.GetBlackboardComponent()->SetValueAsEnum(TEXT("BossState"), (uint8)EEnemyState::E_Chasing);
+	}
+	
 }
