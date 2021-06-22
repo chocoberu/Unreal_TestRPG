@@ -23,8 +23,15 @@ void UTEnemyAnimInstance::PlayHitMontage()
 
 void UTEnemyAnimInstance::PlayNormalAttackMontage()
 {
-	if (NormalAttackArray.Num() > 0 && NormalAttackArray[0] != nullptr)
-		Montage_Play(NormalAttackArray[0], 1.0f);
+	int32 AnimIndex = FMath::RandRange(0, NormalAttackArray.Num() - 1);
+	if (NormalAttackArray.Num() > 0 && NormalAttackArray[AnimIndex] != nullptr)
+		Montage_Play(NormalAttackArray[AnimIndex], 1.0f);
+}
+
+void UTEnemyAnimInstance::PlayUppercutAttackMontage()
+{
+	if (UppercutAttackMontage != nullptr)
+		Montage_Play(UppercutAttackMontage, 1.0f);
 }
 
 void UTEnemyAnimInstance::PlaySpawnMontage()

@@ -12,6 +12,7 @@
 ATestSwordBoss::ATestSwordBoss()
 {
 	bEntrance = true;
+	BossState = EBossState::E_Phase1;
 }
 
 void ATestSwordBoss::BeginPlay()
@@ -47,6 +48,11 @@ void ATestSwordBoss::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 void ATestSwordBoss::NormalAttack()
 {
 	EnemyAnimInstance->PlayNormalAttackMontage();
+}
+
+void ATestSwordBoss::UppercutAttack()
+{
+	EnemyAnimInstance->PlayUppercutAttackMontage();
 }
 
 void ATestSwordBoss::SetEntranceStart()
@@ -99,7 +105,7 @@ bool ATestSwordBoss::SweepAttackCheck(FHitResult& HitResult, FVector& AttackEnd,
 	FColor DebugColor = bResult ? FColor::Green : FColor::Red;
 	DrawDebugLine(GetWorld(), AttackStart, AttackEnd, DebugColor, false, 1.0f);
 
-		// 공격 판정 범위를 DrawDebugCapsule로 표시
+	// 공격 판정 범위를 DrawDebugCapsule로 표시
 #if ENABLE_DRAW_DEBUG
 	FVector TraceVec = GetActorForwardVector() * SkillRange;
 	FVector Center = GetActorLocation() + TraceVec * 0.5f;
@@ -155,6 +161,11 @@ void ATestSwordBoss::NormalAttackCheck()
 		// No Hit 파티클 생성
 		//UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), NormalAttackNoHitParticle, AttackEnd, FRotator::ZeroRotator);
 	}
+}
+
+void ATestSwordBoss::UppercutAttackCheck()
+{
+	// TODO : uppercut attack check
 }
 
 void ATestSwordBoss::SpawnMinion()

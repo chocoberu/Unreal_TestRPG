@@ -10,6 +10,15 @@ class ATBaseEnemyCharacter;
 /**
  * 
  */
+
+UENUM(BlueprintType)
+enum class EBossState : uint8
+{
+	E_Phase1 = 0 UMETA(DisplayName = "Phase1"),
+	E_Phase2 UMETA(DisplayName = "Phase2"),
+};
+
+
 UCLASS()
 class TESTRPG_API ATestSwordBoss : public ATBaseEnemyCharacter
 {
@@ -39,6 +48,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	float NormalAttackDamage;
 
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	float UppercutAttackDamage;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Character")
 	float DefaultMaxSpeed;
 
@@ -53,6 +65,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Attack")
 	bool bSpawnMinion;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
+	EBossState BossState;
 
 public:
 	// Called every frame
@@ -62,6 +76,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void NormalAttack();
+
+	void UppercutAttack();
 
 	void MoveForward(float Value);
 
@@ -73,6 +89,9 @@ public:
 
 	UFUNCTION()
 	void NormalAttackCheck();
+
+	UFUNCTION()
+	void UppercutAttackCheck();
 
 	void SpawnMinion();
 };

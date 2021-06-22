@@ -31,6 +31,8 @@ public:
 
 	void PlayNormalAttackMontage();
 
+	void PlayUppercutAttackMontage();
+
 	// µ®∏Æ∞‘¿Ã∆Æ
 	FOnNormalAttackHitCheckDelegate OnNormalAttackHitCheckDelegate;
 	FOnEntranceStartDelegate OnEntranceStartDelegate;
@@ -49,6 +51,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
 	UAnimMontage* SpawnMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Meta = (AllowPrivateAccess = true))
+	UAnimMontage* UppercutAttackMontage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", Meta = (AllowPrivateAccess = true))
 	float CurrentSpeed;
