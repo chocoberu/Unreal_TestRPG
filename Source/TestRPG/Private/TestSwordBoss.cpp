@@ -2,6 +2,7 @@
 
 
 #include "TestSwordBoss.h"
+#include "THealthComponent.h"
 #include "TEnemyAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "EnemyAIController.h"
@@ -13,6 +14,7 @@ ATestSwordBoss::ATestSwordBoss()
 {
 	bEntrance = true;
 	BossState = EBossState::E_Phase1;
+	Phase2Percent = 0.5f;
 }
 
 void ATestSwordBoss::BeginPlay()
@@ -38,6 +40,25 @@ void ATestSwordBoss::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ATestSwordBoss::OnHealthChangedProcess(float Health)
+{
+	Super::OnHealthChangedProcess(Health);
+
+	if (Health <= HealthComponent->GetDefaultHealth() * Phase2Percent && BossState == EBossState::E_Phase1)
+	{
+		BossState = EBossState::E_Phase2;
+
+		auto BlackboardComp = EnemyAIController->GetBlackboardComponent();
+		if (BlackboardComp == nullptr)
+			return;
+		BlackboardComp->SetValueAsEnum(TEXT("BossPhase"), (uint8)EBossState::E_Phase2);
+
+		// TODO : Phase2 능력치 상승 부분 처리
+		NormalAttackDamage *= 1.5f;
+		GetCharacterMovement()->MaxWalkSpeed = DefaultMaxSpeed * 1.5f;
+	}
 }
 
 void ATestSwordBoss::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

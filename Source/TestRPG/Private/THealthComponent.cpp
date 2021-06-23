@@ -62,6 +62,11 @@ float UTHealthComponent::GetHealth() const
 	return Health;
 }
 
+float UTHealthComponent::GetDefaultHealth() const
+{
+	return DefaultHealth;
+}
+
 float UTHealthComponent::GetHPRatio() const
 {
 	return Health < KINDA_SMALL_NUMBER ? 0.0f : (Health / DefaultHealth);

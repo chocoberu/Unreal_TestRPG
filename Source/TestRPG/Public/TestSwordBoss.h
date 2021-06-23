@@ -31,6 +31,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void OnHealthChangedProcess(float Health) override;
+
 	bool SweepAttackCheck(FHitResult& HitResult, FVector& AttackEnd, float SkillRange, float SkillRadius);
 
 	// Components
@@ -67,6 +69,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
 	EBossState BossState;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
+	float Phase2Percent;
 
 public:
 	// Called every frame

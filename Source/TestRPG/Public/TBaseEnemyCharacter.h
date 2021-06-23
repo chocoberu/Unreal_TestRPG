@@ -21,6 +21,9 @@ protected:
 
 	virtual void PlayHitMontage();
 
+	// OnHealthChanged() 내부 처리 함수
+	virtual void OnHealthChangedProcess(float Health);
+
 	UFUNCTION()
 	void OnHealthChanged(class UTHealthComponent* OwningHealthComp, float Health, float HealthDelta, const class UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
 

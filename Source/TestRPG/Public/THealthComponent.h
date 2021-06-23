@@ -39,6 +39,7 @@ public:
 
 	float GetHealth() const;
 	float GetHPRatio() const;
+	float GetDefaultHealth() const;
 
 	void SetHealth(float NewHealth);
 

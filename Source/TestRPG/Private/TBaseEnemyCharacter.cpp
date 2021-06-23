@@ -46,7 +46,7 @@ void ATBaseEnemyCharacter::PlayHitMontage()
 
 }
 
-void ATBaseEnemyCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, float Health, float HealthDelta, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
+void ATBaseEnemyCharacter::OnHealthChangedProcess(float Health)
 {
 	if (HPBarWidgetObject != nullptr)
 	{
@@ -55,9 +55,14 @@ void ATBaseEnemyCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, 
 	if (Health > 0.0f)
 	{
 		PlayHitMontage();
-		return;
 	}
+}
 
+void ATBaseEnemyCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, float Health, float HealthDelta, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
+{
+	OnHealthChangedProcess(Health);
+
+	// Enemy Character 죽었을 때 처리
 	if (Health <= 0.0f && !bDied)
 	{
 		bDied = true;
