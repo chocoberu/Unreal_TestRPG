@@ -13,7 +13,7 @@
 ATestSwordBoss::ATestSwordBoss()
 {
 	bEntrance = true;
-	BossState = EBossState::E_Phase1;
+	BossPhase = EBossPhase::E_Phase1;
 	Phase2Percent = 0.5f;
 }
 
@@ -24,6 +24,7 @@ void ATestSwordBoss::BeginPlay()
 	EnemyAnimInstance->OnEntranceStartDelegate.AddUObject(this, &ATestSwordBoss::SetEntranceStart);
 	EnemyAnimInstance->OnEntranceEndDelegate.AddUObject(this, &ATestSwordBoss::SetEntranceEnd);
 	EnemyAnimInstance->OnNormalAttackHitCheckDelegate.AddUObject(this, &ATestSwordBoss::NormalAttackCheck);
+	EnemyAnimInstance->OnUppercutHitCheckDelegate.AddUObject(this, &ATestSwordBoss::UppercutAttackCheck);
 
 	if (EnemyAIController != nullptr)
 	{
@@ -46,14 +47,15 @@ void ATestSwordBoss::OnHealthChangedProcess(float Health)
 {
 	Super::OnHealthChangedProcess(Health);
 
-	if (Health <= HealthComponent->GetDefaultHealth() * Phase2Percent && BossState == EBossState::E_Phase1)
+	// Phase 2 진입 처리
+	if (Health <= HealthComponent->GetDefaultHealth() * Phase2Percent && BossPhase == EBossPhase::E_Phase1)
 	{
-		BossState = EBossState::E_Phase2;
+		BossPhase = EBossPhase::E_Phase2;
 
 		auto BlackboardComp = EnemyAIController->GetBlackboardComponent();
 		if (BlackboardComp == nullptr)
 			return;
-		BlackboardComp->SetValueAsEnum(TEXT("BossPhase"), (uint8)EBossState::E_Phase2);
+		BlackboardComp->SetValueAsEnum(TEXT("BossPhase"), (uint8)EBossPhase::E_Phase2);
 
 		// TODO : Phase2 능력치 상승 부분 처리
 		NormalAttackDamage *= 1.5f;
@@ -73,6 +75,8 @@ void ATestSwordBoss::NormalAttack()
 
 void ATestSwordBoss::UppercutAttack()
 {
+	if (bUppercut)
+		return;
 	EnemyAnimInstance->PlayUppercutAttackMontage();
 }
 
@@ -187,6 +191,33 @@ void ATestSwordBoss::NormalAttackCheck()
 void ATestSwordBoss::UppercutAttackCheck()
 {
 	// TODO : uppercut attack check
+	if (bDied)
+		return;
+	UE_LOG(LogTemp, Log, TEXT("SwordBoss : UppercutCheck"));
+	FHitResult HitResult;
+	FVector AttackEnd;
+
+	bool bResult = SweepAttackCheck(HitResult, AttackEnd, AttackRange * 1.2f, AttackRadius * 1.2f);
+	if (bResult)
+	{
+		if (HitResult.Actor.IsValid())
+		{
+			auto Character = Cast<ACharacter>(HitResult.Actor.Get());
+			if (Character == nullptr)
+				return;
+
+			UE_LOG(LogTemp, Log, TEXT("SwordBoss : %s attack"), *Character->GetName());
+
+			FDamageEvent DamageEvent;
+			HitResult.Actor->TakeDamage(UppercutAttackDamage, // 데미지 크기
+				DamageEvent, // 데미지 종류
+				GetController(), // 가해자 (컨트롤러)
+				this); // 데미지 전달을 위해 사용한 도구 (액터)
+		}
+	}
+
+	bUppercut = true;
+	GetWorldTimerManager().SetTimer(UppercutTimer, FTimerDelegate::CreateLambda([&]() {bUppercut = false; }), UppercutCoolTime, false);
 }
 
 void ATestSwordBoss::SpawnMinion()
@@ -214,4 +245,8 @@ void ATestSwordBoss::SpawnMinion()
 	bSpawnMinion = true;
 	GetWorldTimerManager().SetTimer(SpawnTimer, FTimerDelegate::CreateLambda([&]() {bSpawnMinion = false; }), SpawnCoolTime, false);
 
+}
+bool ATestSwordBoss::CanUppercut()
+{
+	return !bUppercut;
 }

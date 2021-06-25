@@ -9,6 +9,7 @@
 using FOnNormalAttackHitCheckDelegate = TMulticastDelegate<void()>;
 using FOnEntranceStartDelegate = TMulticastDelegate<void()>;
 using FOnEntranceEndDelegate = TMulticastDelegate<void()>;
+using FOnUppercutHitCheckDelegate = TMulticastDelegate<void()>;
 /**
  * 
  */
@@ -37,6 +38,7 @@ public:
 	FOnNormalAttackHitCheckDelegate OnNormalAttackHitCheckDelegate;
 	FOnEntranceStartDelegate OnEntranceStartDelegate;
 	FOnEntranceEndDelegate OnEntranceEndDelegate;
+	FOnUppercutHitCheckDelegate OnUppercutHitCheckDelegate;
 
 protected:
 
@@ -69,4 +71,7 @@ protected:
 
 	UFUNCTION()
 	void AnimNotify_SwingAttackCheck();
+
+	UFUNCTION()
+	void AnimNotify_UppercutCheck();
 };

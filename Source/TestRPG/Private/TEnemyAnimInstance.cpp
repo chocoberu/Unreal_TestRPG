@@ -59,3 +59,7 @@ void UTEnemyAnimInstance::AnimNotify_SwingAttackCheck()
 {
 	OnNormalAttackHitCheckDelegate.Broadcast();
 }
+void UTEnemyAnimInstance::AnimNotify_UppercutCheck()
+{
+	OnUppercutHitCheckDelegate.Broadcast();
+}

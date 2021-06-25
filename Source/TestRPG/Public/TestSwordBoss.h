@@ -12,7 +12,7 @@ class ATBaseEnemyCharacter;
  */
 
 UENUM(BlueprintType)
-enum class EBossState : uint8
+enum class EBossPhase : uint8
 {
 	E_Phase1 = 0 UMETA(DisplayName = "Phase1"),
 	E_Phase2 UMETA(DisplayName = "Phase2"),
@@ -68,7 +68,15 @@ protected:
 	bool bSpawnMinion;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
-	EBossState BossState;
+	float UppercutCoolTime;
+
+	FTimerHandle UppercutTimer;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Attack")
+	bool bUppercut;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
+	EBossPhase BossPhase;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
 	float Phase2Percent;
@@ -99,5 +107,7 @@ public:
 	void UppercutAttackCheck();
 
 	void SpawnMinion();
+
+	bool CanUppercut();
 };
 
