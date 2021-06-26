@@ -7,6 +7,7 @@
 #include "TestSwordBoss.generated.h"
 
 class ATBaseEnemyCharacter;
+class ATestSlash;
 /**
  * 
  */
@@ -66,6 +67,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Attack")
 	bool bSpawnMinion;
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	TSubclassOf<ATestSlash> SlashClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
 	float UppercutCoolTime;

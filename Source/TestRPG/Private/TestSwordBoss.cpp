@@ -9,6 +9,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "DrawDebugHelpers.h"
 #include "NavigationSystem.h"
+#include "TestSlash.h"
 
 ATestSwordBoss::ATestSwordBoss()
 {
@@ -190,7 +191,6 @@ void ATestSwordBoss::NormalAttackCheck()
 
 void ATestSwordBoss::UppercutAttackCheck()
 {
-	// TODO : uppercut attack check
 	if (bDied)
 		return;
 	UE_LOG(LogTemp, Log, TEXT("SwordBoss : UppercutCheck"));
@@ -214,6 +214,18 @@ void ATestSwordBoss::UppercutAttackCheck()
 				GetController(), // 가해자 (컨트롤러)
 				this); // 데미지 전달을 위해 사용한 도구 (액터)
 		}
+	}
+
+	// Slash 
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	auto Slash = GetWorld()->SpawnActor<ATestSlash>(SlashClass, GetActorLocation() + GetActorForwardVector() * 100.0f, FRotator::ZeroRotator, SpawnParams);
+
+	// TEST CODE
+	if (Slash)
+	{
+		Slash->SetOwner(this);
+		Slash->SetLifeSpan(3.0f);
 	}
 
 	bUppercut = true;
