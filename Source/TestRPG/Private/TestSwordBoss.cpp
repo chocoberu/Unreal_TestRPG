@@ -219,13 +219,12 @@ void ATestSwordBoss::UppercutAttackCheck()
 	// Slash 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	auto Slash = GetWorld()->SpawnActor<ATestSlash>(SlashClass, GetActorLocation() + GetActorForwardVector() * 100.0f, FRotator::ZeroRotator, SpawnParams);
+	auto Slash = GetWorld()->SpawnActor<ATestSlash>(SlashClass, GetActorLocation() + GetActorForwardVector() * 300.0f, GetActorRotation(), SpawnParams);
 
-	// TEST CODE
 	if (Slash)
 	{
 		Slash->SetOwner(this);
-		Slash->SetLifeSpan(3.0f);
+		Slash->SetSlashDirection(GetActorForwardVector());
 	}
 
 	bUppercut = true;

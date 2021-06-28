@@ -3,6 +3,8 @@
 
 #include "TestSlash.h"
 #include "Components/SphereComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "PlayerCharacter.h"
 #include "THealthComponent.h"
@@ -14,10 +16,18 @@ ATestSlash::ATestSlash()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
+	StaticMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
+	MovementComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	ParticleSystemComp = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ParticleSystemComponent"));
 
 	RootComponent = SphereComp;
+	StaticMeshComp->SetupAttachment(RootComponent);
 	ParticleSystemComp->SetupAttachment(RootComponent);
+	MovementComp->SetUpdatedComponent(SphereComp);
+	MovementComp->bRotationFollowsVelocity = true;
+	
+	StaticMeshComp->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+
 }
 
 // Called when the game starts or when spawned
@@ -25,14 +35,13 @@ void ATestSlash::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	SetLifeSpan(SlashLifeTime);
 }
 
 // Called every frame
 void ATestSlash::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	//SphereComp->AddForce(GetActorForwardVector());
 }
 
 void ATestSlash::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -44,6 +53,12 @@ void ATestSlash::NotifyActorBeginOverlap(AActor* OtherActor)
 	{
 		FDamageEvent DamageEvent;
 		Player->TakeDamage(AttackDamage, DamageEvent, nullptr, GetOwner());
+		UE_LOG(LogTemp, Log, TEXT("Slash Overlap %s"), *OtherActor->GetName());
 	}
+}
+
+void ATestSlash::SetSlashDirection(const FVector SlashDirection)
+{
+	MovementComp->Velocity = SlashDirection * MovementComp->InitialSpeed;
 }
 
