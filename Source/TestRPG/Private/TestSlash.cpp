@@ -48,13 +48,14 @@ void ATestSlash::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
-	auto Player = Cast<APlayerCharacter>(OtherActor);
+	auto Player = Cast<ACharacter>(OtherActor);
 	if (Player != nullptr)
 	{
 		FDamageEvent DamageEvent;
 		Player->TakeDamage(AttackDamage, DamageEvent, nullptr, GetOwner());
 		UE_LOG(LogTemp, Log, TEXT("Slash Overlap %s"), *OtherActor->GetName());
 	}
+	SetActorHiddenInGame(true);
 }
 
 void ATestSlash::SetSlashDirection(const FVector SlashDirection)

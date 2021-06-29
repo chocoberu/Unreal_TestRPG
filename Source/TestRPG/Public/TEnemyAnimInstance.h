@@ -10,6 +10,7 @@ using FOnNormalAttackHitCheckDelegate = TMulticastDelegate<void()>;
 using FOnEntranceStartDelegate = TMulticastDelegate<void()>;
 using FOnEntranceEndDelegate = TMulticastDelegate<void()>;
 using FOnUppercutHitCheckDelegate = TMulticastDelegate<void()>;
+using FOnUppercutRotateDelegate = TMulticastDelegate<void()>;
 /**
  * 
  */
@@ -39,6 +40,7 @@ public:
 	FOnEntranceStartDelegate OnEntranceStartDelegate;
 	FOnEntranceEndDelegate OnEntranceEndDelegate;
 	FOnUppercutHitCheckDelegate OnUppercutHitCheckDelegate;
+	FOnUppercutRotateDelegate OnUppercutRotateDelegate;
 
 protected:
 
@@ -74,4 +76,7 @@ protected:
 
 	UFUNCTION()
 	void AnimNotify_UppercutCheck();
+
+	UFUNCTION()
+	void AnimNotify_UppercutRotate();
 };

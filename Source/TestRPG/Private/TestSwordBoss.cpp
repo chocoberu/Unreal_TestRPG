@@ -26,11 +26,12 @@ void ATestSwordBoss::BeginPlay()
 	EnemyAnimInstance->OnEntranceEndDelegate.AddUObject(this, &ATestSwordBoss::SetEntranceEnd);
 	EnemyAnimInstance->OnNormalAttackHitCheckDelegate.AddUObject(this, &ATestSwordBoss::NormalAttackCheck);
 	EnemyAnimInstance->OnUppercutHitCheckDelegate.AddUObject(this, &ATestSwordBoss::UppercutAttackCheck);
+	EnemyAnimInstance->OnUppercutRotateDelegate.AddUObject(this, &ATestSwordBoss::RotateToTarget);
 
 	if (EnemyAIController != nullptr)
 	{
 		EnemyAIController->RunAI();
-		auto BlackboardComp = EnemyAIController->GetBlackboardComponent();
+		BlackboardComp = EnemyAIController->GetBlackboardComponent();
 		if (BlackboardComp == nullptr)
 			return;
 		BlackboardComp->SetValueAsBool(TEXT("bEntrance"), true);
@@ -53,7 +54,7 @@ void ATestSwordBoss::OnHealthChangedProcess(float Health)
 	{
 		BossPhase = EBossPhase::E_Phase2;
 
-		auto BlackboardComp = EnemyAIController->GetBlackboardComponent();
+		//auto BlackboardComp = EnemyAIController->GetBlackboardComponent();
 		if (BlackboardComp == nullptr)
 			return;
 		BlackboardComp->SetValueAsEnum(TEXT("BossPhase"), (uint8)EBossPhase::E_Phase2);
@@ -95,7 +96,7 @@ void ATestSwordBoss::SetEntranceEnd()
 
 	if (EnemyAIController != nullptr)
 	{
-		auto BlackboardComp = EnemyAIController->GetBlackboardComponent();
+		//auto BlackboardComp = EnemyAIController->GetBlackboardComponent();
 		if (BlackboardComp == nullptr)
 			return;
 		BlackboardComp->SetValueAsVector(TEXT("NextPos"), GetActorLocation());
@@ -152,34 +153,78 @@ bool ATestSwordBoss::SweepAttackCheck(FHitResult& HitResult, FVector& AttackEnd,
 	return bResult;
 }
 
+bool ATestSwordBoss::SweepMultiAttackCheck(TArray<FHitResult>& OutHits, FVector& AttackEnd, float SkillRange, float SkillRadius)
+{
+	FCollisionQueryParams Params(NAME_None, false, this);
+
+	FRotator AttackRot;
+	FVector AttackStart;
+	GetActorEyesViewPoint(AttackStart, AttackRot);
+	AttackEnd = AttackStart + AttackRot.Vector() * SkillRange;
+
+	bool bResult = GetWorld()->SweepMultiByChannel(
+		OutHits,
+		AttackStart,
+		AttackEnd,
+		FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel2,
+		FCollisionShape::MakeSphere(SkillRadius),
+		Params);
+
+	// Debug 관련
+	FColor DebugColor = bResult ? FColor::Green : FColor::Red;
+	DrawDebugLine(GetWorld(), AttackStart, AttackEnd, DebugColor, false, 1.0f);
+
+	// 공격 판정 범위를 DrawDebugCapsule로 표시
+#if ENABLE_DRAW_DEBUG
+	FVector TraceVec = GetActorForwardVector() * SkillRange;
+	FVector Center = GetActorLocation() + TraceVec * 0.5f;
+	float HalfHeight = SkillRadius * 0.5f;
+	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+	float DebugLifeTime = 1.0f;
+
+	DrawDebugCapsule(GetWorld(),
+		Center,
+		HalfHeight,
+		SkillRadius,
+		AttackRot.Quaternion(),
+		DebugColor,
+		false,
+		DebugLifeTime);
+#endif
+
+	return bResult;
+}
+
 void ATestSwordBoss::NormalAttackCheck()
 {
 	if (bDied)
 		return;
 	UE_LOG(LogTemp, Log, TEXT("SwordBoss : NormalAttackCheck"));
-	FHitResult HitResult;
+	
+	TArray<FHitResult> OutHits;
+
 	FVector AttackEnd;
 
-	bool bResult = SweepAttackCheck(HitResult, AttackEnd, AttackRange, AttackRadius);
+	bool bResult = SweepMultiAttackCheck(OutHits, AttackEnd, AttackRange, AttackRadius);
 
 	if (bResult)
 	{
-		if (HitResult.Actor.IsValid())
+		for (auto& iter : OutHits)
 		{
-			auto Character = Cast<ACharacter>(HitResult.Actor.Get());
+			if (!iter.Actor.IsValid())
+				continue;
+			auto Character = Cast<ACharacter>(iter.Actor.Get());
 			if (Character == nullptr)
-				return;
-
+				continue;
+			
 			UE_LOG(LogTemp, Log, TEXT("SwordBoss : %s attack"), *Character->GetName());
 
 			FDamageEvent DamageEvent;
-			HitResult.Actor->TakeDamage(NormalAttackDamage, // 데미지 크기
+			Character->TakeDamage(NormalAttackDamage, // 데미지 크기
 				DamageEvent, // 데미지 종류
 				GetController(), // 가해자 (컨트롤러)
 				this); // 데미지 전달을 위해 사용한 도구 (액터)
-
-			// 타격 파티클 생성
-			//UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), NormalAttackHitParticle, HitResult.ImpactPoint, HitResult.ImpactNormal.Rotation());
 		}
 	}
 	else
@@ -194,25 +239,28 @@ void ATestSwordBoss::UppercutAttackCheck()
 	if (bDied)
 		return;
 	UE_LOG(LogTemp, Log, TEXT("SwordBoss : UppercutCheck"));
-	FHitResult HitResult;
+	TArray<FHitResult> OutHits;
 	FVector AttackEnd;
 
-	bool bResult = SweepAttackCheck(HitResult, AttackEnd, AttackRange * 1.2f, AttackRadius * 1.2f);
+	bool bResult = SweepMultiAttackCheck(OutHits, AttackEnd, AttackRange * 1.2f, AttackRadius * 1.2f);
+
 	if (bResult)
 	{
-		if (HitResult.Actor.IsValid())
+		for (auto& iter : OutHits)
 		{
-			auto Character = Cast<ACharacter>(HitResult.Actor.Get());
-			if (Character == nullptr)
-				return;
+			if (!iter.Actor.IsValid())
+				continue;
 
-			UE_LOG(LogTemp, Log, TEXT("SwordBoss : %s attack"), *Character->GetName());
+			auto Character = Cast<ACharacter>(iter.Actor.Get());
+			if (Character == nullptr)
+				continue;
 
 			FDamageEvent DamageEvent;
-			HitResult.Actor->TakeDamage(UppercutAttackDamage, // 데미지 크기
+			Character->TakeDamage(UppercutAttackDamage, // 데미지 크기
 				DamageEvent, // 데미지 종류
 				GetController(), // 가해자 (컨트롤러)
 				this); // 데미지 전달을 위해 사용한 도구 (액터)
+
 		}
 	}
 
@@ -229,6 +277,19 @@ void ATestSwordBoss::UppercutAttackCheck()
 
 	bUppercut = true;
 	GetWorldTimerManager().SetTimer(UppercutTimer, FTimerDelegate::CreateLambda([&]() {bUppercut = false; }), UppercutCoolTime, false);
+}
+
+void ATestSwordBoss::RotateToTarget()
+{
+	auto Character = Cast<ACharacter>(BlackboardComp->GetValueAsObject(TEXT("TargetActor")));
+	if (Character == nullptr)
+		return;
+
+	FVector Forward = Character->GetActorLocation() - GetActorLocation();
+	Forward.Z = 0.0f;
+	
+	// TEST CODE
+	SetActorRotation(Forward.Rotation());
 }
 
 void ATestSwordBoss::SpawnMinion()

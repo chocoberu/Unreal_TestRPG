@@ -63,3 +63,8 @@ void UTEnemyAnimInstance::AnimNotify_UppercutCheck()
 {
 	OnUppercutHitCheckDelegate.Broadcast();
 }
+
+void UTEnemyAnimInstance::AnimNotify_UppercutRotate()
+{
+	OnUppercutRotateDelegate.Broadcast();
+}

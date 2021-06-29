@@ -34,11 +34,16 @@ protected:
 
 	virtual void OnHealthChangedProcess(float Health) override;
 
+	bool SweepMultiAttackCheck(TArray<FHitResult>& OutHits, FVector& AttackEnd, float SkillRange, float SkillRadius);
+
 	bool SweepAttackCheck(FHitResult& HitResult, FVector& AttackEnd, float SkillRange, float SkillRadius);
 
 	// Components
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UTEnemyAnimInstance* EnemyAnimInstance;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	class UBlackboardComponent* BlackboardComp;
 
 	bool bEntrance;
 
@@ -109,6 +114,9 @@ public:
 
 	UFUNCTION()
 	void UppercutAttackCheck();
+
+	UFUNCTION()
+	void RotateToTarget();
 
 	void SpawnMinion();
 
