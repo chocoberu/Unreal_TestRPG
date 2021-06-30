@@ -40,6 +40,11 @@ void ASwordEnemyCharacter::BeginPlay()
 void ASwordEnemyCharacter::PlayHitMontage()
 {
 	Super::PlayHitMontage();
+	if (bNormalAttack)
+	{
+		bNormalAttack = false;
+		OnAttackEnd.Broadcast();
+	}
 	EnemyAnimInstance->PlayHitMontage();
 }
 

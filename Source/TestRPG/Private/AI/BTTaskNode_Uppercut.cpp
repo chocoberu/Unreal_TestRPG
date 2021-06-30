@@ -11,7 +11,8 @@
 UBTTaskNode_Uppercut::UBTTaskNode_Uppercut()
 {
 	NodeName = TEXT("Uppercut Skill");
-	bNotifyTick = false;
+	bNotifyTick = true;
+	bUppercut = false;
 }
 
 EBTNodeResult::Type UBTTaskNode_Uppercut::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -25,5 +26,19 @@ EBTNodeResult::Type UBTTaskNode_Uppercut::ExecuteTask(UBehaviorTreeComponent& Ow
 	else
 		ControllingPawn->NormalAttack();
 
-	return EBTNodeResult::Succeeded;
+	ControllingPawn->OnAttackEnd.AddLambda([this]() {
+		bUppercut = false;
+		});
+
+	bUppercut = true;
+
+	return EBTNodeResult::InProgress;
+}
+
+void UBTTaskNode_Uppercut::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+{
+	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
+
+	if (!bUppercut)
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 }

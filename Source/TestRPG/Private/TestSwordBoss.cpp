@@ -27,6 +27,7 @@ void ATestSwordBoss::BeginPlay()
 	EnemyAnimInstance->OnNormalAttackHitCheckDelegate.AddUObject(this, &ATestSwordBoss::NormalAttackCheck);
 	EnemyAnimInstance->OnUppercutHitCheckDelegate.AddUObject(this, &ATestSwordBoss::UppercutAttackCheck);
 	EnemyAnimInstance->OnUppercutRotateDelegate.AddUObject(this, &ATestSwordBoss::RotateToTarget);
+	EnemyAnimInstance->OnMontageEnded.AddDynamic(this, &ATBaseEnemyCharacter::OnAttackEnded);
 
 	if (EnemyAIController != nullptr)
 	{
@@ -168,7 +169,7 @@ bool ATestSwordBoss::SweepMultiAttackCheck(TArray<FHitResult>& OutHits, FVector&
 		AttackEnd,
 		FQuat::Identity,
 		ECollisionChannel::ECC_GameTraceChannel2,
-		FCollisionShape::MakeSphere(SkillRadius),
+		FCollisionShape::MakeCapsule(SkillRadius, SkillRange * 0.5f),
 		Params);
 
 	// Debug ฐüทร
@@ -179,7 +180,7 @@ bool ATestSwordBoss::SweepMultiAttackCheck(TArray<FHitResult>& OutHits, FVector&
 #if ENABLE_DRAW_DEBUG
 	FVector TraceVec = GetActorForwardVector() * SkillRange;
 	FVector Center = GetActorLocation() + TraceVec * 0.5f;
-	float HalfHeight = SkillRadius * 0.5f;
+	float HalfHeight = SkillRange * 0.5f;
 	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
 	float DebugLifeTime = 1.0f;
 
@@ -242,7 +243,7 @@ void ATestSwordBoss::UppercutAttackCheck()
 	TArray<FHitResult> OutHits;
 	FVector AttackEnd;
 
-	bool bResult = SweepMultiAttackCheck(OutHits, AttackEnd, AttackRange * 1.2f, AttackRadius * 1.2f);
+	bool bResult = SweepMultiAttackCheck(OutHits, AttackEnd, AttackRange, AttackRadius);
 
 	if (bResult)
 	{
@@ -265,6 +266,8 @@ void ATestSwordBoss::UppercutAttackCheck()
 	}
 
 	// Slash 
+	FVector SlashDir = Cast<ACharacter>(BlackboardComp->GetValueAsObject(TEXT("TargetActor")))->GetActorLocation() - GetActorLocation();
+	SlashDir = SlashDir / SlashDir.Size();
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	auto Slash = GetWorld()->SpawnActor<ATestSlash>(SlashClass, GetActorLocation() + GetActorForwardVector() * 300.0f, GetActorRotation(), SpawnParams);
@@ -272,7 +275,8 @@ void ATestSwordBoss::UppercutAttackCheck()
 	if (Slash)
 	{
 		Slash->SetOwner(this);
-		Slash->SetSlashDirection(GetActorForwardVector());
+		//Slash->SetSlashDirection(GetActorForwardVector());
+		Slash->SetSlashDirection(SlashDir);
 	}
 
 	bUppercut = true;
@@ -321,4 +325,9 @@ void ATestSwordBoss::SpawnMinion()
 bool ATestSwordBoss::CanUppercut()
 {
 	return !bUppercut;
+}
+
+bool ATestSwordBoss::CanSpawn()
+{
+	return !bSpawnMinion;
 }

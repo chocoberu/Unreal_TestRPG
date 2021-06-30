@@ -55,7 +55,10 @@ void ATestSlash::NotifyActorBeginOverlap(AActor* OtherActor)
 		Player->TakeDamage(AttackDamage, DamageEvent, nullptr, GetOwner());
 		UE_LOG(LogTemp, Log, TEXT("Slash Overlap %s"), *OtherActor->GetName());
 	}
+
+	SphereComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SetActorHiddenInGame(true);
+	
 }
 
 void ATestSlash::SetSlashDirection(const FVector SlashDirection)

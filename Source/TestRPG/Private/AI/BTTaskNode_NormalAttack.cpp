@@ -9,13 +9,17 @@
 
 UBTTaskNode_NormalAttack::UBTTaskNode_NormalAttack()
 {
+	bNotifyTick = true;
 	NodeName = TEXT("AI Normal Attack");
+	bAttack = false;
 }
 
 void UBTTaskNode_NormalAttack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
+	if(!bAttack)
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 }
 
 EBTNodeResult::Type UBTTaskNode_NormalAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -26,5 +30,10 @@ EBTNodeResult::Type UBTTaskNode_NormalAttack::ExecuteTask(UBehaviorTreeComponent
 
 	AICharacter->NormalAttack();
 
-	return EBTNodeResult::Succeeded;
+	AICharacter->OnAttackEnd.AddLambda([this]() -> void {
+		bAttack = false;
+		});
+
+	bAttack = true;
+	return EBTNodeResult::InProgress;
 }

@@ -121,5 +121,8 @@ public:
 	void SpawnMinion();
 
 	bool CanUppercut();
+
+	bool CanSpawn();
+
 };
 

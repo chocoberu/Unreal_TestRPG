@@ -99,6 +99,15 @@ void ATBaseEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 void ATBaseEnemyCharacter::NormalAttack()
 {
-	UE_LOG(LogTemp, Log, TEXT("TODO : Enemy Normal Attack"));
+	//UE_LOG(LogTemp, Log, TEXT("TODO : Enemy Normal Attack"));
+	bNormalAttack = true;
 }
 
+
+void ATBaseEnemyCharacter::OnAttackEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	if (bNormalAttack)
+		bNormalAttack = false;
+
+	OnAttackEnd.Broadcast();
+}

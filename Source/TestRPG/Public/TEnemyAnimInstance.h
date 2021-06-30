@@ -79,4 +79,5 @@ protected:
 
 	UFUNCTION()
 	void AnimNotify_UppercutRotate();
+
 };

@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "TBaseEnemyCharacter.generated.h"
 
+using FOnAttackEnd = TMulticastDelegate<void()>;
+
 UCLASS()
 class TESTRPG_API ATBaseEnemyCharacter : public ACharacter
 {
@@ -43,6 +45,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player")
 	ECharacterAffiliation CharacterAffiliation;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Attack")
+	bool bNormalAttack;
+
 	UPROPERTY(BlueprintReadOnly, Category = "Player")
 	bool bDied;
 
@@ -55,5 +60,10 @@ public:
 
 	virtual void NormalAttack();
 
+	UFUNCTION()
+	void OnAttackEnded(UAnimMontage* Montage, bool bInterrupted);
+
 	ECharacterAffiliation GetCharacterAffilation() { return CharacterAffiliation; }
+
+	FOnAttackEnd OnAttackEnd;
 };
