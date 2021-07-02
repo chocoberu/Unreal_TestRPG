@@ -46,9 +46,9 @@ void ATestSwordBoss::Tick(float DeltaTime)
 
 }
 
-void ATestSwordBoss::OnHealthChangedProcess(float Health)
+void ATestSwordBoss::OnHealthChangedProcess(float Health, float Damage)
 {
-	Super::OnHealthChangedProcess(Health);
+	Super::OnHealthChangedProcess(Health, Damage);
 
 	// Phase 2 진입 처리
 	if (Health <= HealthComponent->GetDefaultHealth() * Phase2Percent && BossPhase == EBossPhase::E_Phase1)

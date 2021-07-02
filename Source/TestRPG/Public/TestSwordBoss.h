@@ -32,7 +32,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	virtual void OnHealthChangedProcess(float Health) override;
+	virtual void OnHealthChangedProcess(float Health, float Damage) override;
 
 	bool SweepMultiAttackCheck(TArray<FHitResult>& OutHits, FVector& AttackEnd, float SkillRange, float SkillRadius);
 

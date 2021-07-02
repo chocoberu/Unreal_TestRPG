@@ -8,6 +8,8 @@
 
 using FOnAttackEnd = TMulticastDelegate<void()>;
 
+class UDamageTextWidget;
+
 UCLASS()
 class TESTRPG_API ATBaseEnemyCharacter : public ACharacter
 {
@@ -24,7 +26,7 @@ protected:
 	virtual void PlayHitMontage();
 
 	// OnHealthChanged() 내부 처리 함수
-	virtual void OnHealthChangedProcess(float Health);
+	virtual void OnHealthChangedProcess(float Health, float Damage);
 
 	UFUNCTION()
 	void OnHealthChanged(class UTHealthComponent* OwningHealthComp, float Health, float HealthDelta, const class UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
@@ -41,6 +43,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "UI")
 	class UTestHPBarWidget* HPBarWidgetObject;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UDamageTextWidget> DamageTextClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player")
 	ECharacterAffiliation CharacterAffiliation;

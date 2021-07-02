@@ -9,6 +9,7 @@
 #include "EnemyAIController.h"
 #include "Components/WidgetComponent.h"
 #include "TestHPBarWidget.h"
+#include "Widget/DamageTextWidget.h"
 
 // Sets default values
 ATBaseEnemyCharacter::ATBaseEnemyCharacter()
@@ -46,11 +47,26 @@ void ATBaseEnemyCharacter::PlayHitMontage()
 
 }
 
-void ATBaseEnemyCharacter::OnHealthChangedProcess(float Health)
+void ATBaseEnemyCharacter::OnHealthChangedProcess(float Health, float Damage)
 {
 	if (HPBarWidgetObject != nullptr)
 	{
 		HPBarWidgetObject->UpdateHPWidget();
+
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		//auto DamageText = GetWorld()->SpawnActor<UDamageTextWidget>(DamageTextClass, GetActorLocation(), GetActorRotation(), SpawnParams);
+		
+		//auto DamageText = CreateWidget<UDamageTextWidget>(EnemyAIController, DamageTextClass);
+		//
+		//if (DamageText != nullptr)
+		//{
+		//	DamageText->AddToPlayerScreen();
+		//	//DamageText
+		//	FText DamageTextValue = FText::FromString(FString::SanitizeFloat(Damage));
+		//	DamageText->UpdateDamage(DamageTextValue);
+		//}
 	}
 	if (Health > 0.0f)
 	{
@@ -60,7 +76,7 @@ void ATBaseEnemyCharacter::OnHealthChangedProcess(float Health)
 
 void ATBaseEnemyCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, float Health, float HealthDelta, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-	OnHealthChangedProcess(Health);
+	OnHealthChangedProcess(Health, HealthDelta);
 
 	// Enemy Character 죽었을 때 처리
 	if (Health <= 0.0f && !bDied)
