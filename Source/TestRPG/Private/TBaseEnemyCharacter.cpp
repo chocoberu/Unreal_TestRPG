@@ -10,6 +10,7 @@
 #include "Components/WidgetComponent.h"
 #include "TestHPBarWidget.h"
 #include "Widget/DamageTextWidget.h"
+#include "Widget/DamageTextWidgetComponent.h"
 
 // Sets default values
 ATBaseEnemyCharacter::ATBaseEnemyCharacter()
@@ -24,8 +25,8 @@ ATBaseEnemyCharacter::ATBaseEnemyCharacter()
 
 	CharacterAffiliation = ECharacterAffiliation::E_Enemy;
 
-	HPBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBarWidget"));
-	HPBarWidget->SetupAttachment(GetMesh());
+	HPBarWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HPBarWidgetComp"));
+	HPBarWidgetComponent->SetupAttachment(GetMesh());
 	
 }
 
@@ -35,7 +36,7 @@ void ATBaseEnemyCharacter::BeginPlay()
 	Super::BeginPlay();	
 	EnemyAIController = Cast<AEnemyAIController>(GetController());
 
-	HPBarWidgetObject = Cast<UTestHPBarWidget>(HPBarWidget->GetUserWidgetObject());
+	HPBarWidgetObject = Cast<UTestHPBarWidget>(HPBarWidgetComponent->GetUserWidgetObject());
 	if (HPBarWidgetObject != nullptr)
 	{
 		HPBarWidgetObject->BindCharacter(HealthComponent);
@@ -53,9 +54,23 @@ void ATBaseEnemyCharacter::OnHealthChangedProcess(float Health, float Damage)
 	{
 		HPBarWidgetObject->UpdateHPWidget();
 
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		if (DamageTextCompClass != nullptr)
+			DamageTextComponent = Cast<UDamageTextWidgetComponent>(AddComponentByClass(DamageTextCompClass, true, GetActorTransform(), false));
 
+		// TEST CODE
+		if (DamageTextComponent == nullptr)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Error : DamageTextComponent"));
+		}
+		else
+		{
+			UE_LOG(LogTemp, Log, TEXT("DamageTextComp Set"));
+			//DamageTextComponent->SetRelativeTransform(GetActorTransform());
+			DamageTextComponent->SetDamageText(Damage);
+			DamageTextComponent = nullptr;
+		}
+		
+		//AddComponentByClass()
 		//auto DamageText = GetWorld()->SpawnActor<UDamageTextWidget>(DamageTextClass, GetActorLocation(), GetActorRotation(), SpawnParams);
 		
 		//auto DamageText = CreateWidget<UDamageTextWidget>(EnemyAIController, DamageTextClass);
@@ -93,7 +108,7 @@ void ATBaseEnemyCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, 
 		
 		DetachFromControllerPendingDestroy();
 
-		HPBarWidget->SetHiddenInGame(true);
+		HPBarWidgetComponent->SetHiddenInGame(true);
 		
 		SetLifeSpan(10.0f);
 	}

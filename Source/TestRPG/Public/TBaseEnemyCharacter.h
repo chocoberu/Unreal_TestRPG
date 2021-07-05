@@ -9,6 +9,7 @@
 using FOnAttackEnd = TMulticastDelegate<void()>;
 
 class UDamageTextWidget;
+class UDamageTextWidgetComponent;
 
 UCLASS()
 class TESTRPG_API ATBaseEnemyCharacter : public ACharacter
@@ -39,13 +40,16 @@ protected:
 	class AEnemyAIController* EnemyAIController;
 
 	UPROPERTY(VisibleAnywhere, Category = "UI")
-	class UWidgetComponent* HPBarWidget;
+	class UWidgetComponent* HPBarWidgetComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = "UI")
 	class UTestHPBarWidget* HPBarWidgetObject;
 
+	UPROPERTY(VisibleAnywhere, Category = "UI")
+	class UDamageTextWidgetComponent* DamageTextComponent;
+
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
-	TSubclassOf<UDamageTextWidget> DamageTextClass;
+	TSubclassOf<UDamageTextWidgetComponent> DamageTextCompClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player")
 	ECharacterAffiliation CharacterAffiliation;

@@ -6,7 +6,10 @@
 
 void UDamageTextWidget::UpdateDamage(FText Damage)
 {
-	DamageText->SetText(Damage);
+	if(DamageText != nullptr)
+		DamageText->SetText(Damage);
+	else
+		UE_LOG(LogTemp, Error, TEXT("UpdateDamage() DamageText is null"));
 }
 
 void UDamageTextWidget::NativeConstruct()
@@ -14,4 +17,9 @@ void UDamageTextWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	DamageText = Cast<UTextBlock>(GetWidgetFromName(TEXT("Damage")));
+
+	if (DamageText == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("NativeConstruct() DamageText is null"));
+	}
 }

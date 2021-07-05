@@ -25,7 +25,7 @@ void ATestPotionItem::UseItem(AActor* OverlapActor)
 	if (Player == nullptr)
 		return;
 
-	auto HealthComp = Cast<UTHealthComponent>(Player->GetComponentByClass(HealthComponentClass));
+	auto HealthComp = Cast<UTHealthComponent>(Player->GetComponentByClass(UTHealthComponent::StaticClass()));
 	if (HealthComp == nullptr)
 		return;
 
