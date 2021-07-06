@@ -65,23 +65,9 @@ void ATBaseEnemyCharacter::OnHealthChangedProcess(float Health, float Damage)
 		else
 		{
 			UE_LOG(LogTemp, Log, TEXT("DamageTextComp Set"));
-			//DamageTextComponent->SetRelativeTransform(GetActorTransform());
 			DamageTextComponent->SetDamageText(Damage);
 			DamageTextComponent = nullptr;
-		}
-		
-		//AddComponentByClass()
-		//auto DamageText = GetWorld()->SpawnActor<UDamageTextWidget>(DamageTextClass, GetActorLocation(), GetActorRotation(), SpawnParams);
-		
-		//auto DamageText = CreateWidget<UDamageTextWidget>(EnemyAIController, DamageTextClass);
-		//
-		//if (DamageText != nullptr)
-		//{
-		//	DamageText->AddToPlayerScreen();
-		//	//DamageText
-		//	FText DamageTextValue = FText::FromString(FString::SanitizeFloat(Damage));
-		//	DamageText->UpdateDamage(DamageTextValue);
-		//}
+		}		
 	}
 	if (Health > 0.0f)
 	{

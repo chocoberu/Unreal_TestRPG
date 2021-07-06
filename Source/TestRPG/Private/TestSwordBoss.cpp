@@ -285,6 +285,9 @@ void ATestSwordBoss::UppercutAttackCheck()
 
 void ATestSwordBoss::RotateToTarget()
 {
+	if (bDied || !BlackboardComp->IsActive())
+		return;
+
 	auto Character = Cast<ACharacter>(BlackboardComp->GetValueAsObject(TEXT("TargetActor")));
 	if (Character == nullptr)
 		return;

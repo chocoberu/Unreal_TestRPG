@@ -17,5 +17,9 @@ void UDamageTextWidgetComponent::SetDamageText(float Damage)
 	FText Text = FText::FromString(FString::SanitizeFloat(Damage));
 	DamageTextObject->UpdateDamage(Text);
 
-	
+	FTimerHandle DestroyHandle;
+
+	GetWorld()->GetTimerManager().SetTimer(DestroyHandle, FTimerDelegate::CreateLambda([&]() {
+		DestroyComponent();
+		}), 2.0f, false);
 }
