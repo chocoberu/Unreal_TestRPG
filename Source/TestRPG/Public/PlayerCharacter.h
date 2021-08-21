@@ -59,6 +59,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "UI")
 	class UTestHPBarWidget* HPBarWidgetObject;
 
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<class UUserWidget> BloodOverlayHUDClass;
+
+	UPROPERTY(VisibleAnywhere, Category = "UI")
+	class UUserWidget* BloodOverlayHUD;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player")
 	ECharacterAffiliation CharacterAffiliation;
 

@@ -6,6 +6,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Blueprint/UserWidget.h"
 #include "TPlayerAnimInstance.h"
 #include "THealthComponent.h"
 #include "Components/WidgetComponent.h"
@@ -53,6 +54,13 @@ void APlayerCharacter::BeginPlay()
 	{
 		HPBarWidgetObject->BindCharacter(HealthComponent);
 	}
+
+	BloodOverlayHUD = CreateWidget(GetWorld(), BloodOverlayHUDClass);
+	if (BloodOverlayHUD != nullptr)
+	{
+		BloodOverlayHUD->AddToViewport();
+		
+	}
 }
 
 void APlayerCharacter::MoveForward(float Value)
@@ -79,6 +87,9 @@ void APlayerCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, floa
 	if (HPBarWidgetObject != nullptr)
 	{
 		HPBarWidgetObject->UpdateHPWidget();
+
+		FLinearColor HUDColor = FLinearColor(1.0f, 1.0f, 1.0f, HealthComponent->GetHPRatio());
+		BloodOverlayHUD->SetColorAndOpacity(HUDColor);
 	}
 	if (Health <= 0.0f && !bDied)
 	{
