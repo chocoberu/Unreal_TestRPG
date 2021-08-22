@@ -11,6 +11,7 @@
 #include "THealthComponent.h"
 #include "Components/WidgetComponent.h"
 #include "TestHPBarWidget.h"
+#include "Widget/BloodOverlayHUDWidget.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -55,11 +56,10 @@ void APlayerCharacter::BeginPlay()
 		HPBarWidgetObject->BindCharacter(HealthComponent);
 	}
 
-	BloodOverlayHUD = CreateWidget(GetWorld(), BloodOverlayHUDClass);
+	BloodOverlayHUD = Cast<UBloodOverlayHUDWidget>(CreateWidget(GetWorld(), BloodOverlayHUDClass));
 	if (BloodOverlayHUD != nullptr)
 	{
 		BloodOverlayHUD->AddToViewport();
-		
 	}
 }
 
@@ -87,9 +87,7 @@ void APlayerCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, floa
 	if (HPBarWidgetObject != nullptr)
 	{
 		HPBarWidgetObject->UpdateHPWidget();
-
-		FLinearColor HUDColor = FLinearColor(1.0f, 1.0f, 1.0f, HealthComponent->GetHPRatio());
-		BloodOverlayHUD->SetColorAndOpacity(HUDColor);
+		BloodOverlayHUD->UpdateHUDWidget(HealthComponent->GetHPRatio());
 	}
 	if (Health <= 0.0f && !bDied)
 	{
