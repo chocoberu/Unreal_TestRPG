@@ -25,10 +25,13 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 	float ShowPercent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	float ShowTime;
+
 private:
 	
 	UPROPERTY()
 	class UImage* OverlayHUD;
 
-	
+	FTimerHandle InvisibleHUDTimer;
 };

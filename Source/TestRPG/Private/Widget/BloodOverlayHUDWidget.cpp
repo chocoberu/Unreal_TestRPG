@@ -10,13 +10,19 @@ void UBloodOverlayHUDWidget::UpdateHUDWidget(float HPRatio)
 {
 	if (OverlayHUD != nullptr)
 	{
+		GetWorld()->GetTimerManager().ClearTimer(InvisibleHUDTimer);
 		float Percent = FMath::Clamp<float>(1.0f - HPRatio, 0.0f, 1.0f);
 		
 		// ShowPercent 보다 작은 수치이면 HUD 보이지 않도록 설정
-		Percent = Percent >= ShowPercent ? Percent : 0.0f; 
+		//Percent = Percent >= ShowPercent ? Percent : 0.0f; 
 
 		FLinearColor HUDColor = FLinearColor(1.0f, 1.0f, 1.0f, Percent);
 		OverlayHUD->SetColorAndOpacity(HUDColor);
+
+		GetWorld()->GetTimerManager().SetTimer(InvisibleHUDTimer, FTimerDelegate::CreateLambda([&]() {
+			FLinearColor InvisbleColor = FLinearColor(1.0f, 1.0f, 1.0f, 0.0f);
+			OverlayHUD->SetColorAndOpacity(InvisbleColor);
+			}), ShowTime, false);
 	}
 }
 

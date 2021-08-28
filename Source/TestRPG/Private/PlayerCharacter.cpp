@@ -87,7 +87,8 @@ void APlayerCharacter::OnHealthChanged(UTHealthComponent* OwningHealthComp, floa
 	if (HPBarWidgetObject != nullptr)
 	{
 		HPBarWidgetObject->UpdateHPWidget();
-		BloodOverlayHUD->UpdateHUDWidget(HealthComponent->GetHPRatio());
+		if(HealthDelta > 0.0f)
+			BloodOverlayHUD->UpdateHUDWidget(HealthComponent->GetHPRatio());
 	}
 	if (Health <= 0.0f && !bDied)
 	{
